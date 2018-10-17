@@ -1,0 +1,22 @@
+{
+  "name": "np_project01_shell",
+  "version": "1.0.0",
+  "description": "NCTUCS Network Programming 2018 Fall Project 01 - Shell",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
+    "build": "make"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jevancc/NP_Project01_Shell.git"
+  },
+  "author": "Jevan Chan <jevan.cnchan@gmail.com>",
+  "homepage": "https://github.com/jevancc/NP_Project01_Shell#readme",
+  "devDependencies": {
+    "clang-format": "^1.2.4"
+  }
+}
