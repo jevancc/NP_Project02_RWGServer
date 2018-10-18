@@ -33,3 +33,6 @@
 
 # Node.js
 node_modules
+
+# Build
+out
