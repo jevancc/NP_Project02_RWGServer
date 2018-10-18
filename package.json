@@ -1,7 +1,7 @@
 {
-  "name": "np_project01_shell",
+  "name": "np_project01_npshell",
   "version": "1.0.0",
-  "description": "NCTUCS Network Programming 2018 Fall Project 01 - Shell",
+  "description": "NCTUCS Network Programming 2018 Fall Project 01 - NPShell",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
