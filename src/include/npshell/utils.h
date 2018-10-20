@@ -1,6 +1,6 @@
-#include <string>
-#include <cctype>
 #include <algorithm>
+#include <cctype>
+#include <string>
 using namespace std;
 
 namespace np {

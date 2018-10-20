@@ -41,16 +41,27 @@ struct IOOption {
     int line;
 };
 
+class Task;
 class Command {
    private:
     string raw_;
-    vector<tuple<string, vector<string>, vector<IOOption>>> parsed_commands_;
+    vector<Task> parsed_commands_;
 
    public:
     Command(string command);
-    const vector<tuple<string, vector<string>, vector<IOOption>>>& Parse() {
-        return this->parsed_commands_;
-    }
+    const vector<Task>& Parse() { return this->parsed_commands_; }
+};
+
+class Task {
+   private:
+    string file_;
+    vector<string> args_;
+    IOOption stdin_;
+    IOOption stdout_;
+    IOOption stderr_;
+
+   public:
+    friend class Command;
 };
 
 class Environment {
