@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
-    "build": "make"
+    "build": "make",
+    "start": "./out/npshell"
   },
   "engines": {
     "node": ">=8.0.0"
