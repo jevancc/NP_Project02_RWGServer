@@ -20,13 +20,13 @@ bool Resolve(const string& cmd) {
     return kBuiltinCommandsSet.find(cmd) != kBuiltinCommandsSet.end();
 }
 
-int Exec(vector<string>& argv, Environment& env) {
+int Exec(const vector<string>& argv, Environment& env) {
     if (argv[0] == "exit")
         return exit(env);
     if (argv[0] == "printenv")
-        return printenv(argv[1], env);
+        return printenv(argv, env);
     if (argv[0] == "setenv")
-        return setenv(argv[1], argv[2], env);
+        return setenv(argv, env);
     return np::ExecError::kFileNotFound;
 }
 
@@ -35,14 +35,21 @@ np::ExecError exit(Environment& env) {
     return np::ExecError::kSuccess;
 }
 
-np::ExecError printenv(const string& name, Environment& env) {
-    cout << env.GetParam(name) << endl;
+np::ExecError printenv(const vector<string>& argv, Environment& env) {
+    if (argv.size() < 2) {
+        cerr << "Invalid arguments" << endl;
+    } else {
+        cout << env.GetParam(argv[1]) << endl;
+    }
     return np::ExecError::kSuccess;
 }
 
-np::ExecError setenv(const string& name, const string& value,
-                     Environment& env) {
-    env.SetParam(name, value);
+np::ExecError setenv(const vector<string>& argv, Environment& env) {
+    if (argv.size() < 3) {
+        cerr << "Invalid arguments" << endl;
+    } else {
+        env.SetParam(argv[1], argv[2]);
+    }
     return np::ExecError::kSuccess;
 }
 

@@ -40,7 +40,7 @@ char** Task::C_Args() {
 }
 
 pid_t Task::Exec(Environment& env) {
-    if (this->argv_.empty()){
+    if (this->argv_.empty()) {
         return ExecError::kSuccess;
     }
     if (builtin::Resolve(this->argv_[0])) {
