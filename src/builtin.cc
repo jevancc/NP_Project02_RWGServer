@@ -1,5 +1,7 @@
 #include <np/builtin.h>
+#include <np/constants.h>
 #include <np/types.h>
+#include <signal.h>
 #include <cstdlib>
 #include <iostream>
 #include <set>
@@ -31,6 +33,11 @@ int Exec(const vector<string>& argv, Environment& env) {
 }
 
 np::ExecError exit(Environment& env) {
+  for (int i = 0; i < kMaxDelayedPipe; i++) {
+    for (auto& pid : env.GetChildProcess(i)) {
+      kill(pid, SIGKILL);
+    }
+  }
   ::exit(0);
   return np::ExecError::kSuccess;
 }
