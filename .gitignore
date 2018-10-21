@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+npshell
 
 # Node.js
 node_modules

@@ -20,7 +20,11 @@ ALL := \
 	$(OBJS)/task.o \
 	$(OBJS)/environment.o
 
+.PHONY: build
+
 all: build
+	@cp $(EXE) ./npshell
+	@chmod 775 ./npshell
 
 $(OBJS)/%.o: $(SRCS)/%.cc
 	@mkdir -p $(OBJS)

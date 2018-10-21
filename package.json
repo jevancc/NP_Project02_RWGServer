@@ -7,7 +7,7 @@
     "format": "npm run format:js && npm run format:cpp",
     "format:js": "npx prettier --loglevel warn --write \"*.{ts,js,json}\" \"test/*.js\"",
     "format:cpp": "node node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
-    "build": "make",
+    "build": "make build",
     "start": "./build/npshell"
   },
   "engines": {
