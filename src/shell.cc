@@ -1,19 +1,20 @@
 #include <npshell/shell.h>
 #include <npshell/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <unistd.h>
 using namespace std;
 
 namespace np {
-Shell::Shell() { this->env_.SetParam("PATH", "bin:.:/bin"); }
+Shell::Shell() { this->env_.SetParam("PATH", "bin:."); }
 
 void Shell::Run() {
     signal(SIGCHLD, [](int signo) {
         int status;
-        while(waitpid(-1, &status, WNOHANG) > 0);
+        while (waitpid(-1, &status, WNOHANG) > 0)
+            ;
     });
 
     string input;
@@ -39,7 +40,7 @@ void Shell::Run() {
                     throw runtime_error("Unexpected error happened");
             }
         }
-        if (!command.Parse().empty()){
+        if (!command.Parse().empty()) {
             auto last_task = *command.Parse().rbegin();
             if (last_task.GetStdout().type == IO::kPipe) {
                 this->env_.AddChildProcesses(last_task.GetStdout().line,
