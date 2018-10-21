@@ -36,4 +36,8 @@ node_modules
 yarn-error.log
 
 # Build
-out
+build
+
+# Test Cases builds
+test/_workSpace
+test/**/_workSpaceTemplate

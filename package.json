@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "NCTUCS Network Programming 2018 Fall Project 01 - NPShell",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
+    "test": "mocha",
+    "format": "npm run format:js && npm run format:cpp",
+    "format:js": "npx prettier --loglevel warn --write \"*.{ts,js,json}\" \"test/*.js\"",
+    "format:cpp": "node node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
     "build": "make",
-    "start": "./out/npshell"
+    "start": "./build/npshell"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -18,6 +20,10 @@
   "author": "Jevan Chan <jevan.cnchan@gmail.com>",
   "homepage": "https://github.com/jevancc/NP_Project01_Shell#readme",
   "devDependencies": {
-    "clang-format": "^1.2.4"
+    "clang-format": "^1.2.4",
+    "mocha": "^5.2.0",
+    "prettier": "^1.14.3",
+    "shelljs": "^0.8.2",
+    "should": "^13.2.3"
   }
 }
