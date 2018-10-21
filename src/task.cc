@@ -40,6 +40,9 @@ char** Task::C_Args() {
 }
 
 pid_t Task::Exec(Environment& env) {
+    if (this->argv_.empty()){
+        return ExecError::kSuccess;
+    }
     if (builtin::Resolve(this->argv_[0])) {
         return builtin::Exec(this->argv_, env);
     }
@@ -62,8 +65,7 @@ pid_t Task::Exec(Environment& env) {
 
     pid_t pid = fork();
     if (pid < 0) {
-        fprintf(stderr, "Fork Failed");
-        exit(-1);
+        return ExecError::kForkFailed;
     } else if (pid > 0) {
         // parent process
         last_pipe.Close();
