@@ -104,7 +104,7 @@ pid_t Task::Exec(Environment& env) {
             case IO::kInherit:
                 break;
             case IO::kPipe:
-                env.GetPipe(this->stderr_.line).DupOut2(STDOUT_FILENO);
+                env.GetPipe(this->stderr_.line).DupOut2(STDERR_FILENO);
                 break;
             case IO::kFile:  // NOTE: Not in spec
                 break;
