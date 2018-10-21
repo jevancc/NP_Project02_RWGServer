@@ -7,8 +7,8 @@ using namespace std;
 using nonstd::nullopt;
 using nonstd::optional;
 
-#define PIPE_IN 0
-#define PIPE_OUT 1
+const int kPipeIn = 0;
+const int kPipeOut = 1;
 
 namespace np {
 
@@ -24,12 +24,12 @@ Pipe Pipe::Create() {
 }
 
 optional<int> Pipe::In() {
-    return this->fd_[PIPE_IN] >= 0 ? optional<int>(this->fd_[PIPE_IN])
+    return this->fd_[kPipeIn] >= 0 ? optional<int>(this->fd_[kPipeIn])
                                    : nullopt;
 }
 
 optional<int> Pipe::Out() {
-    return this->fd_[PIPE_OUT] >= 0 ? optional<int>(this->fd_[PIPE_OUT])
+    return this->fd_[kPipeOut] >= 0 ? optional<int>(this->fd_[kPipeOut])
                                     : nullopt;
 }
 
@@ -39,13 +39,13 @@ void Pipe::DupOut2(int fd) { dup2(*this->Out(), fd); }
 
 int Pipe::Close() {
     int status = 0;
-    if (this->fd_[PIPE_IN] >= 0) {
-        status |= ::close(this->fd_[PIPE_IN]);
-        this->fd_[PIPE_IN] = -1;
+    if (this->fd_[kPipeIn] >= 0) {
+        status |= ::close(this->fd_[kPipeIn]);
+        this->fd_[kPipeIn] = -1;
     }
-    if (this->fd_[PIPE_OUT] >= 0) {
-        status |= ::close(this->fd_[PIPE_OUT]);
-        this->fd_[PIPE_OUT] = -1;
+    if (this->fd_[kPipeOut] >= 0) {
+        status |= ::close(this->fd_[kPipeOut]);
+        this->fd_[kPipeOut] = -1;
     }
     return status;
 }
