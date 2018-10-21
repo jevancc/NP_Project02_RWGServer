@@ -10,7 +10,7 @@ using namespace std;
 namespace np {
 Command::Command(string command) {
     static regex pipe_regex(R"([^|!]+((\|\d+|!\d+)\s*$|\||$))");
-    static regex args_regex(R"((\||!)(\d+)?|(>)?\s*(\S+))");
+    static regex argv_regex(R"((\||!)(\d+)?|(>)?\s*(\S+))");
     this->raw_ = utils::trim(command);
 
     smatch sm;
@@ -26,10 +26,9 @@ Command::Command(string command) {
 
     for (auto s : commands) {
         Task task;
-        bool is_arg = false;
 
         utils::trim(s);
-        while (regex_search(s, sm, args_regex)) {
+        while (regex_search(s, sm, argv_regex)) {
             if (sm[1].length() > 0) {
                 // if x == "|\d+" or "!\d+" or "|"
                 if (sm[2].length() > 0) {
@@ -52,12 +51,7 @@ Command::Command(string command) {
                 task.stdout_.file = sm[4];
             } else {
                 // others
-                if (!is_arg) {
-                    task.file_ = sm[4];
-                    is_arg = true;
-                } else {
-                    task.args_.push_back(sm[4]);
-                }
+                task.argv_.push_back(sm[4]);
             }
 
             s = sm.suffix().str();

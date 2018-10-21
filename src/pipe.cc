@@ -14,12 +14,12 @@ namespace np {
 
 Pipe::Pipe() { this->fd_[0] = this->fd_[1] = -1; }
 
-optional<Pipe> Pipe::Create() {
+Pipe Pipe::Create() {
     Pipe p;
     if (pipe(p.fd_) < 0) {
-        return p;
+        throw runtime_error("fail to create pipe");
     } else {
-        return nullopt;
+        return p;
     }
 }
 
@@ -33,28 +33,20 @@ optional<int> Pipe::Out() {
                                     : nullopt;
 }
 
-optional<int> Pipe::GetIn() {
-    if (this->fd_[PIPE_OUT] >= 0) {
-        if (::close(this->fd_[PIPE_OUT]) < 0) {
-            return nullopt;
-        }
-        this->fd_[PIPE_OUT] = -1;
-    }
-    return this->In();
-}
+void Pipe::DupIn2(int fd) { dup2(*this->In(), fd); }
 
-optional<int> Pipe::GetOut() {
-    if (this->fd_[PIPE_IN] >= 0) {
-        if (::close(this->fd_[PIPE_IN]) < 0) {
-            return nullopt;
-        }
-        this->fd_[PIPE_IN] = -1;
-    }
-    return this->Out();
-}
+void Pipe::DupOut2(int fd) { dup2(*this->Out(), fd); }
 
 int Pipe::Close() {
-    return (this->fd_[PIPE_IN] >= 0 ? ::close(this->fd_[PIPE_IN]) : 0) |
-           (this->fd_[PIPE_OUT] >= 0 ? ::close(this->fd_[PIPE_OUT]) : 0);
+    int status = 0;
+    if (this->fd_[PIPE_IN] >= 0) {
+        status |= ::close(this->fd_[PIPE_IN]);
+        this->fd_[PIPE_IN] = -1;
+    }
+    if (this->fd_[PIPE_OUT] >= 0) {
+        status |= ::close(this->fd_[PIPE_OUT]);
+        this->fd_[PIPE_OUT] = -1;
+    }
+    return status;
 }
 }  // namespace np

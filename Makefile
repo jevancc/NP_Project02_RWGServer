@@ -1,6 +1,10 @@
 CXX = g++
 CFLAGS = -std=c++11 -Wall
-INCLUDES = -Isrc/include -Ilib/easyloggingpp/src -Ilib/optional-lite/include
+INCLUDES = \
+	-Isrc/include \
+	-Ilib/easyloggingpp/src \
+	-Ilib/optional-lite/include \
+	-Ilib
 
 OUT = ./out
 EXE = $(OUT)/npshell
@@ -8,8 +12,12 @@ SRCS = ./src
 OBJS = $(OUT)/objs
 
 ALL := \
+	$(OBJS)/shell.o \
+	$(OBJS)/builtin.o \
 	$(OBJS)/pipe.o \
-	$(OBJS)/command.o
+	$(OBJS)/command.o \
+	$(OBJS)/task.o \
+	$(OBJS)/environment.o
 	# $(OBJS)/builtin.o
 
 all: main

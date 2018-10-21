@@ -1,4 +1,5 @@
 #include <npshell/builtin.h>
+#include <npshell/types.h>
 #include <cstdlib>
 #include <iostream>
 #include <set>
@@ -7,26 +8,43 @@
 using namespace std;
 
 const vector<string> kBuiltinCommands({"exit", "printenv", "setenv"});
-const set<string> kBuiltinCommandsSet(builtin_commands.begin(),
-                                      builtin_commands.end());
+const set<string> kBuiltinCommandsSet(kBuiltinCommands.begin(),
+                                      kBuiltinCommands.end());
 
+namespace np {
 namespace builtin {
 
-// constvector<string>& commands() { return builtin_commands; }
-//
-// bool resolve(const string& cmd) {
-//     return builtin_commands_set.find(cmd) != builtin_commands_set.end();
-// }
-//
-// int exec(string cmd, std::vector<string> argv, Environment env) {}
-//
-// int exit(Environment& env);
-// int printenv(const string& name, Environment& env) {
-//     string value = env.params.find(name);
-//     if (
-// }
-//
-// int setenv(const string& name, const string& value, Environment& env) {
-//     env.params.insert(name, value);
-// }
+const vector<string>& Commands() { return kBuiltinCommands; }
+
+bool Resolve(const string& cmd) {
+    return kBuiltinCommandsSet.find(cmd) != kBuiltinCommandsSet.end();
+}
+
+int Exec(vector<string>& argv, Environment& env) {
+    if (argv[0] == "exit")
+        return exit(env);
+    if (argv[0] == "printenv")
+        return printenv(argv[1], env);
+    if (argv[0] == "setenv")
+        return setenv(argv[1], argv[2], env);
+    return np::ExecError::kFileNotFound;
+}
+
+np::ExecError exit(Environment& env) {
+    ::exit(0);
+    return np::ExecError::kSuccess;
+}
+
+np::ExecError printenv(const string& name, Environment& env) {
+    cout << env.GetParam(name) << endl;
+    return np::ExecError::kSuccess;
+}
+
+np::ExecError setenv(const string& name, const string& value,
+                     Environment& env) {
+    env.SetParam(name, value);
+    return np::ExecError::kSuccess;
+}
+
 }  // namespace builtin
+}  // namespace np

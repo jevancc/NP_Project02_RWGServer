@@ -1,14 +1,16 @@
 // #include <npshell/environment.h>
+#include <npshell/types.h>
 #include <string>
 #include <vector>
+using namespace std;
 
+namespace np {
 namespace builtin {
-const std::vector<std::string>& commands();
-bool resolve(const std::string& cmd);
-
-// int exec(string cmd, std::vector<string> argv, Environment env);
-
-// int exit(Environment env);
-// int printenv(string name, Environment env);
-// int setenv(string name, string value, Environment env);
+const vector<string>& Commands();
+bool Resolve(const string& cmd);
+int Exec(vector<string>& argv, Environment& env);
+np::ExecError exit(Environment& env);
+np::ExecError printenv(const string& name, Environment& env);
+np::ExecError setenv(const string& name, const string& value, Environment& env);
 }  // namespace builtin
+}  // namespace np
