@@ -105,19 +105,12 @@ enum ExecError {
 
 class Environment {
  private:
-  map<string, string> params_;
   Pipe pipes_[kMaxDelayedPipe];
   vector<pid_t> child_processes_[kMaxDelayedPipe];
   int current_line_;
 
  public:
   Environment() : current_line_(0) {}
-  char** C_Params();
-  string GetParam(const string& key) { return this->params_[key]; }
-  string SetParam(const string& key, const string& value) {
-    return this->params_[key] = value;
-  }
-  optional<string> ResolvePath(const string& s);
 
   Pipe& GetPipe(int line = 0) {
     return this->pipes_[(line + current_line_) % kMaxDelayedPipe];

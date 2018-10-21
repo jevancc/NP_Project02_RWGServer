@@ -34,7 +34,7 @@ describe("TestCases", () => {
           let testCaseDir = path.join(testItemDir, c.name);
           it(c.name, () => {
             shell
-              .exec(`${execPath} < ${path.join(testCaseDir, "in.txt")}`, {
+              .exec(`${execPath} < ${path.join(testCaseDir, "in.txt")} 2>&1`, {
                 silent: true,
                 cwd: caseWorkSpace
               })

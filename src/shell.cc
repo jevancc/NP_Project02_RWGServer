@@ -2,13 +2,14 @@
 #include <np/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <cstdlib>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 using namespace std;
 
 namespace np {
-Shell::Shell() { this->env_.SetParam("PATH", "bin:."); }
+Shell::Shell() { setenv("PATH", "bin:.", 1); }
 
 void Shell::Run() {
   signal(SIGCHLD, [](int signo) {

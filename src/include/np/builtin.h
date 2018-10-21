@@ -12,8 +12,8 @@ const vector<string>& Commands();
 bool Resolve(const string& cmd);
 int Exec(const vector<string>& argv, Environment& env);
 np::ExecError exit(Environment& env);
-np::ExecError printenv(const vector<string>& argv, Environment& env);
-np::ExecError setenv(const vector<string>& argv, Environment& env);
+np::ExecError printenv(const vector<string>& argv);
+np::ExecError setenv(const vector<string>& argv);
 }  // namespace builtin
 }  // namespace np
 

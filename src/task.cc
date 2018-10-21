@@ -47,13 +47,6 @@ pid_t Task::Exec(Environment& env) {
     return builtin::Exec(this->argv_, env);
   }
 
-  auto resolved_path = env.ResolvePath(this->argv_[0]);
-  if (!resolved_path) {
-    return ExecError::kFileNotFound;
-  } else {
-    this->argv_[0] = *resolved_path;
-  }
-
   Pipe last_pipe = env.GetPipe();
   env.SetPipe(0, Pipe::Create());
   if (this->stdout_.type == IO::kPipe) {
@@ -114,8 +107,11 @@ pid_t Task::Exec(Environment& env) {
 
     const char* file = this->argv_[0].c_str();
     char** arg = this->C_Args();
-    char** envp = env.C_Params();
-    return execvpe(file, arg, envp);
+    if (execvp(file, arg) < 0) {
+      cerr << "Unknown command: [" << this->argv_[0] << "]." << endl;
+      exit(0);
+    }
+    return ExecError::kSuccess;
   }
 }
 }  // namespace np

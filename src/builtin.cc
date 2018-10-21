@@ -24,9 +24,9 @@ int Exec(const vector<string>& argv, Environment& env) {
   if (argv[0] == "exit")
     return exit(env);
   if (argv[0] == "printenv")
-    return printenv(argv, env);
+    return printenv(argv);
   if (argv[0] == "setenv")
-    return setenv(argv, env);
+    return setenv(argv);
   return np::ExecError::kFileNotFound;
 }
 
@@ -35,20 +35,25 @@ np::ExecError exit(Environment& env) {
   return np::ExecError::kSuccess;
 }
 
-np::ExecError printenv(const vector<string>& argv, Environment& env) {
+np::ExecError printenv(const vector<string>& argv) {
   if (argv.size() < 2) {
     cerr << "Invalid arguments" << endl;
   } else {
-    cout << env.GetParam(argv[1]) << endl;
+    const char* envp = ::getenv(argv[1].c_str());
+    if (envp) {
+      cout << ::getenv(argv[1].c_str()) << endl;
+    } else {
+      cout << endl;
+    }
   }
   return np::ExecError::kSuccess;
 }
 
-np::ExecError setenv(const vector<string>& argv, Environment& env) {
+np::ExecError setenv(const vector<string>& argv) {
   if (argv.size() < 3) {
     cerr << "Invalid arguments" << endl;
   } else {
-    env.SetParam(argv[1], argv[2]);
+    ::setenv(argv[1].c_str(), argv[2].c_str(), 1);
   }
   return np::ExecError::kSuccess;
 }
