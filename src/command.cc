@@ -1,5 +1,5 @@
-#include <npshell/types.h>
-#include <npshell/utils.h>
+#include <np/types.h>
+#include <np/utils.h>
 #include <iostream>
 #include <regex>
 #include <string>

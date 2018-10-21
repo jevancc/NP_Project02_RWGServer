@@ -1,5 +1,5 @@
-#include <npshell/shell.h>
-#include <npshell/types.h>
+#include <np/shell.h>
+#include <np/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <iostream>

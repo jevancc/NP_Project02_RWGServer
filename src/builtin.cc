@@ -1,5 +1,5 @@
-#include <npshell/builtin.h>
-#include <npshell/types.h>
+#include <np/builtin.h>
+#include <np/types.h>
 #include <cstdlib>
 #include <iostream>
 #include <set>

@@ -1,7 +1,7 @@
-#ifndef _TYPES_H_
-#define _TYPES_H_
+#ifndef _NP_TYPES_H_
+#define _NP_TYPES_H_
 
-#include <npshell/constants.h>
+#include <np/constants.h>
 #include <map>
 #include <nonstd/optional.hpp>
 #include <string>

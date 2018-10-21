@@ -1,5 +1,7 @@
-// #include <npshell/environment.h>
-#include <npshell/types.h>
+#ifndef _NP_BUILTIN_H_
+#define _NP_BUILTIN_H_
+
+#include <np/types.h>
 #include <string>
 #include <vector>
 using namespace std;
@@ -14,3 +16,5 @@ np::ExecError printenv(const vector<string>& argv, Environment& env);
 np::ExecError setenv(const vector<string>& argv, Environment& env);
 }  // namespace builtin
 }  // namespace np
+
+#endif

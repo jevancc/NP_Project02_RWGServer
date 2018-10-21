@@ -1,5 +1,5 @@
-#include <npshell/constants.h>
-#include <npshell/types.h>
+#include <np/constants.h>
+#include <np/types.h>
 #include <sys/stat.h>
 #include <apathy/path.hpp>
 #include <nonstd/optional.hpp>

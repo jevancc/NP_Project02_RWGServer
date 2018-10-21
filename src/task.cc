@@ -1,6 +1,6 @@
 #include <fcntl.h>
-#include <npshell/builtin.h>
-#include <npshell/types.h>
+#include <np/builtin.h>
+#include <np/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

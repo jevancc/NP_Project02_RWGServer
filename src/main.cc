@@ -1,4 +1,4 @@
-#include <npshell/shell.h>
+#include <np/shell.h>
 
 int main() {
   np::Shell shell;
