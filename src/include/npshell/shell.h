@@ -2,11 +2,11 @@
 
 namespace np {
 class Shell {
-   private:
-    Environment env_;
+ private:
+  Environment env_;
 
-   public:
-    Shell();
-    void Run();
+ public:
+  Shell();
+  void Run();
 };
 }  // namespace np
