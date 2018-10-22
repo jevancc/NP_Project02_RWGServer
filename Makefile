@@ -2,9 +2,7 @@ CXX = g++
 CFLAGS = -std=c++11 -Wall -O2
 INCLUDES = \
 	-Isrc/include \
-	-Ilib/easyloggingpp/src \
-	-Ilib/optional-lite/include \
-	-Ilib
+	-Ilib/optional-lite/include
 
 OUT = ./build
 EXE = $(OUT)/npshell
