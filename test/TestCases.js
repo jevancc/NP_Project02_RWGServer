@@ -9,7 +9,7 @@ const workSpaceDir = path.resolve("test/_workSpace");
 describe("TestCases", () => {
   shell.cd("test");
 
-  shell.ls("-l", "cases").forEach(item => {
+  shell.ls("-l", "cases").filter(c => c && c.name.charAt(0) != "_").forEach(item => {
     describe(item.name, () => {
       let testItemDir = path.resolve("cases", item.name);
       shell.mkdir("-p", path.join(testItemDir, "_workSpaceTemplate"));
