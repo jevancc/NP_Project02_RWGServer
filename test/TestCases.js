@@ -3,7 +3,7 @@ const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
 
-const execPath = path.resolve("build/npshell");
+const execPath = path.resolve("npshell");
 const workSpaceDir = path.resolve("test/_workSpace");
 
 describe("TestCases", () => {
