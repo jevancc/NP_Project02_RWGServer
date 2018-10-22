@@ -87,7 +87,8 @@ pid_t Task::Exec(Environment& env) {
         env.GetPipe(this->stdout_.line).DupOut2(STDOUT_FILENO);
         break;
       case IO::kFile:
-        int fd = open(this->stdout_.file.c_str(), (O_RDWR | O_CREAT), 0644);
+        int fd = open(this->stdout_.file.c_str(),
+                      (O_WRONLY | O_CREAT | O_TRUNC), 0644);
         dup2(fd, STDOUT_FILENO);
         break;
     }
