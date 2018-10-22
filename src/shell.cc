@@ -1,3 +1,4 @@
+#include <np/builtin.h>
 #include <np/shell.h>
 #include <np/types.h>
 #include <sys/wait.h>
@@ -21,7 +22,9 @@ void Shell::Run() {
   string input;
   while (true) {
     cout << "% ";
-    getline(cin, input);
+    if (!getline(cin, input)) {
+      builtin::exit(this->env_);
+    }
 
     Command command(input);
     for (auto task : command.Parse()) {

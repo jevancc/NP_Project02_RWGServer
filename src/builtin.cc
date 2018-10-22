@@ -35,7 +35,7 @@ int Exec(const vector<string>& argv, Environment& env) {
 np::ExecError exit(Environment& env) {
   for (int i = 0; i < kMaxDelayedPipe; i++) {
     for (auto& pid : env.GetChildProcess(i)) {
-      kill(pid, SIGKILL);
+      ::kill(pid, SIGKILL);
     }
   }
   ::exit(0);
