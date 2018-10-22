@@ -1,0 +1,20 @@
+echo helloworld | cat !1
+cat | cat | cat
+INVALID_COMMAND !1
+cat
+INVALID_COMMAND !2
+echo helloworld
+cat | cat | cat
+INVALID_COMMAND !1
+cat | cat | cat |1
+cat | cat | cat !1
+cat
+INVALID_COMMAND | cat !2
+echo helloworld | cat !2
+cat
+cat
+INVALID_COMMAND | cat !3
+
+
+cat
+exit

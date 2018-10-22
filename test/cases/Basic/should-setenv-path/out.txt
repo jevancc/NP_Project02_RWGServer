@@ -1,0 +1,20 @@
+% bin
+bin2
+blank.txt
+test.html
+% Unknown command: [echo].
+% % Unknown command: [ls].
+% helloworld
+% % bin
+bin2
+blank.txt
+test.html
+% Unknown command: [echo].
+% % Unknown command: [ls].
+% Unknown command: [echo].
+% % bin
+bin2
+blank.txt
+test.html
+% helloworld
+% 

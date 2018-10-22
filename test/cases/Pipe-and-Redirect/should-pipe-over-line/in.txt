@@ -1,0 +1,25 @@
+echo line1 | cat |1
+cat
+echo line3 | cat |1
+cat | cat | cat
+echo line5 | cat |2
+echo line6 | cat |2
+cat
+cat | cat
+echo line9 | cat |2
+echo line10 | cat |1
+cat | cat
+echo line12 | cat |1
+cat | cat | cat |1
+cat | cat | cat |2
+echo line15
+cat | cat
+echo line17 |2
+echo line18 |2
+cat
+cat
+echo line21 | cat |3
+
+
+cat
+exit

@@ -1,0 +1,7 @@
+% bin
+bin2
+blank.txt
+test.html
+% Unknown command: [I].
+% Unknown command: [touch].
+% 

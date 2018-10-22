@@ -1,0 +1,10 @@
+% bin
+bin2
+blank.txt
+test.html
+% <!test.html>
+<TITLE>Test</TITLE>
+<BODY>This is a <b>test</b> program
+for ras.
+</BODY>
+% % % % % % 

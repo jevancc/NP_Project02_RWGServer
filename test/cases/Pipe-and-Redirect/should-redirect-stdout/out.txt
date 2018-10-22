@@ -1,0 +1,21 @@
+% % bin
+file1.txt
+test.html
+% helloworld
+% % bin
+file1.txt
+file2.txt
+test.html
+% helloworld
+% % bin
+file1.txt
+file2.txt
+test.html
+% goodbyeworld
+% % % bin
+file1.txt
+file2.txt
+test.html
+% helloworld
+d
+% 

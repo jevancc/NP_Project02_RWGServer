@@ -1,0 +1,14 @@
+echo helloworld > file1.txt
+ls
+cat file1.txt
+echo helloworld | cat | cat > file2.txt
+ls
+cat file2.txt
+echo goodbyeworld > file1.txt
+ls
+cat file1.txt
+echo helloworld | cat | cat |1
+cat | cat > file1.txt
+ls
+cat file1.txt
+exit

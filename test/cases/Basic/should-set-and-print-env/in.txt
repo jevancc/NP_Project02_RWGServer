@@ -1,0 +1,5 @@
+setenv __NP_ENV_npNpnPNP__ npnpnp
+printenv __NP_ENV_npNpnPNP__
+setenv __NP_ENV_npNpnPNP__ NPNPNP
+printenv __NP_ENV_npNpnPNP__
+exit
