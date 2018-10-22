@@ -13,7 +13,7 @@ INVALID_COMMAND | cat !2
 echo helloworld | cat !2
 cat
 cat
-INVALID_COMMAND | cat !3
+INVALID_COMMAND | cat !1
 
 
 cat

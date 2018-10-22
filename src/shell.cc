@@ -27,6 +27,9 @@ void Shell::Run() {
     }
 
     Command command(input);
+    if (command.Parse().empty()) {
+      continue;
+    }
     for (auto task : command.Parse()) {
       // cout << task.ToString() << endl;
       int status;
@@ -43,12 +46,10 @@ void Shell::Run() {
           throw runtime_error("Unexpected error happened");
       }
     }
-    if (!command.Parse().empty()) {
-      auto last_task = *command.Parse().rbegin();
-      if (last_task.GetStdout().type == IO::kPipe) {
-        this->env_.AddChildProcesses(last_task.GetStdout().line,
-                                     this->env_.GetChildProcess());
-      }
+    auto last_task = *command.Parse().rbegin();
+    if (last_task.GetStdout().type == IO::kPipe) {
+      this->env_.AddChildProcesses(last_task.GetStdout().line,
+                                   this->env_.GetChildProcess());
     }
 
     for (auto child_pid : this->env_.GetChildProcess()) {
