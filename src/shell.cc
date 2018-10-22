@@ -31,7 +31,6 @@ void Shell::Run() {
       continue;
     }
     for (auto task : command.Parse()) {
-      // cout << task.ToString() << endl;
       int status;
       while ((status = task.Exec(this->env_)) == ExecError::kForkFailed) {
         usleep(1000);
@@ -54,10 +53,8 @@ void Shell::Run() {
 
     for (auto child_pid : this->env_.GetChildProcess()) {
       int status;
-      // cout << "WAITING " << child_pid << endl;
       waitpid(child_pid, &status, 0);
     }
-    // cout << " DONE " << endl;
     this->env_.GotoNextLine();
   }
 }
