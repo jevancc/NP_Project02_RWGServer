@@ -6,19 +6,22 @@ echo line5 | cat |2
 echo line6 | cat |2
 cat
 cat | cat
-echo line9 | cat |2
-echo line10 | cat |1
+echo line9 | cat |5
+
+
+
+echo line13 | cat |1
 cat | cat
-echo line12 | cat |1
+echo line15 | cat |1
 cat | cat | cat |1
 cat | cat | cat |2
-echo line15
+echo line18
 cat | cat
-echo line17 |2
-echo line18 |2
+echo line20 |2
+echo line21 |2
 cat
 cat
-echo line21 | cat |3
+echo line24 | cat |3
 
 
 cat
