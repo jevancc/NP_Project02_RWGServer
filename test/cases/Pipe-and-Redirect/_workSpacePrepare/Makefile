@@ -17,7 +17,9 @@ all: work
 %: src/%.cpp
 	$(CC) $< $(CPPFLAGS) -o $@
 
-work: ../_workSpaceTemplate/ $(FILE) $(NP_SHELL_CMD) $(BUILD_IN_CMD)
+work: ../_workSpaceTemplate/ \
+	../_workSpaceTemplate/bin/ \
+	$(FILE) $(NP_SHELL_CMD) $(BUILD_IN_CMD)
 
 ../_workSpaceTemplate/bin/%: src/%.cpp | ../_workSpaceTemplate/bin/
 	$(CC) $< $(CPPFLAGS) -o $@
