@@ -5,3 +5,4 @@ cat test.html
 
 
 cat blank.txt
+exit

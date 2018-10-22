@@ -1,0 +1,2 @@
+dump0 | cat | cat | cat | count0
+exit
