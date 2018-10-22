@@ -43,8 +43,9 @@ pid_t Task::Exec(Environment& env) {
   if (this->argv_.empty()) {
     return ExecError::kSuccess;
   }
-  if (builtin::Resolve(this->argv_[0])) {
-    return builtin::Exec(this->argv_, env);
+  ExecError status;
+  if ((status = builtin::Exec(this->argv_, env)) != ExecError::kFileNotFound) {
+    return status;
   }
 
   Pipe last_pipe = env.GetPipe();

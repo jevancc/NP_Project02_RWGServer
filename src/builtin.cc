@@ -3,36 +3,38 @@
 #include <np/types.h>
 #include <signal.h>
 #include <cstdlib>
+#include <functional>
 #include <iostream>
-#include <set>
+#include <map>
 #include <string>
 #include <vector>
 using namespace std;
 
-const vector<string> kBuiltinCommands({"exit", "printenv", "setenv"});
-const set<string> kBuiltinCommandsSet(kBuiltinCommands.begin(),
-                                      kBuiltinCommands.end());
-
 namespace np {
 namespace builtin {
 
-const vector<string>& Commands() { return kBuiltinCommands; }
+const map<string,
+          function<np::ExecError(const vector<string>& argv, Environment& env)>>
+    kCommands{
+        {"exit", exit},
+        {"printenv", printenv},
+        {"setenv", setenv},
+    };
 
-bool Resolve(const string& cmd) {
-  return kBuiltinCommandsSet.find(cmd) != kBuiltinCommandsSet.end();
+np::ExecError Exec(const vector<string>& argv, Environment& env) {
+  if (argv.empty()) {
+    return ExecError::kSuccess;
+  }
+
+  auto resolve = kCommands.find(argv[0]);
+  if (resolve == kCommands.end()) {
+    return ExecError::kFileNotFound;
+  } else {
+    return resolve->second(argv, env);
+  }
 }
 
-int Exec(const vector<string>& argv, Environment& env) {
-  if (argv[0] == "exit")
-    return exit(env);
-  if (argv[0] == "printenv")
-    return printenv(argv);
-  if (argv[0] == "setenv")
-    return setenv(argv);
-  return np::ExecError::kFileNotFound;
-}
-
-np::ExecError exit(Environment& env) {
+np::ExecError exit(const vector<string>& argv, Environment& env) {
   for (int i = 0; i < kMaxDelayedPipe; i++) {
     for (auto& pid : env.GetChildProcess(i)) {
       ::kill(pid, SIGKILL);
@@ -42,7 +44,7 @@ np::ExecError exit(Environment& env) {
   return np::ExecError::kSuccess;
 }
 
-np::ExecError printenv(const vector<string>& argv) {
+np::ExecError printenv(const vector<string>& argv, Environment& env) {
   if (argv.size() < 2) {
     cerr << "Invalid arguments" << endl;
   } else {
@@ -56,7 +58,7 @@ np::ExecError printenv(const vector<string>& argv) {
   return np::ExecError::kSuccess;
 }
 
-np::ExecError setenv(const vector<string>& argv) {
+np::ExecError setenv(const vector<string>& argv, Environment& env) {
   if (argv.size() < 3) {
     cerr << "Invalid arguments" << endl;
   } else {

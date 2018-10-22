@@ -23,7 +23,7 @@ void Shell::Run() {
   while (true) {
     cout << "% ";
     if (!getline(cin, input)) {
-      builtin::exit(this->env_);
+      builtin::exit({"exit"}, this->env_);
     }
 
     Command command(input);
