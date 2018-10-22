@@ -58,6 +58,8 @@ pid_t Task::Exec(Environment& env) {
 
   pid_t pid = fork();
   if (pid < 0) {
+    env.GetPipe().Close();
+    env.SetPipe(0, last_pipe);
     return ExecError::kForkFailed;
   } else if (pid > 0) {
     // parent process
