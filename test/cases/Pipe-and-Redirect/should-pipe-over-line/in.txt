@@ -7,7 +7,7 @@ echo line6 | cat |2
 cat
 cat | cat
 echo line9 | cat |5
-
+sleep 2
 
 
 echo line13 | cat |1

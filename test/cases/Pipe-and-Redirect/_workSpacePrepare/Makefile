@@ -7,7 +7,7 @@ NP_SHELL_CMD = $(patsubst src/%.cpp,../_workSpaceTemplate/bin/%,$(NP_SHELL_CMD_S
 FILE_NAME = $(wildcard file/*)
 FILE = $(patsubst file/%,../_workSpaceTemplate/%,$(FILE_NAME))
 
-BUILD_IN_CMD_NAME = ls cat echo
+BUILD_IN_CMD_NAME = ls cat echo sleep
 BUILD_IN_CMD = $(patsubst %,../_workSpaceTemplate/bin/%,$(BUILD_IN_CMD_NAME))
 
 .PHONY: work
