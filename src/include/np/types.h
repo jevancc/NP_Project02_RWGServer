@@ -46,7 +46,7 @@ class IOOption {
   int line;
   IOOption() : type(IO::kInherit) {}
 
-  string ToString() {
+  string ToString() const {
     char s[32];
     switch (this->type) {
       case IO::kInherit:
@@ -74,7 +74,7 @@ class Command {
 
  public:
   Command(string command);
-  const vector<Task>& Parse() { return this->parsed_commands_; }
+  const vector<Task>& Parse() const { return this->parsed_commands_; }
 };
 
 class Environment;
@@ -87,13 +87,13 @@ class Task {
 
  public:
   friend class Command;
-  string ToString();
-  const string& GetFile() { return this->argv_[0]; }
-  const IOOption& GetStdin() { return this->stdin_; }
-  const IOOption& GetStdout() { return this->stdout_; }
-  const IOOption& GetStderr() { return this->stderr_; }
-  pid_t Exec(Environment& env);
-  char** C_Args();
+  string ToString() const;
+  const string& GetFile() const { return this->argv_[0]; }
+  const IOOption& GetStdin() const { return this->stdin_; }
+  const IOOption& GetStdout() const { return this->stdout_; }
+  const IOOption& GetStderr() const { return this->stderr_; }
+  pid_t Exec(Environment& env) const;
+  char** C_Args() const;
 };
 
 enum ExecError {

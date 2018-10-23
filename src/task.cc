@@ -17,7 +17,7 @@
 using namespace std;
 
 namespace np {
-string Task::ToString() {
+string Task::ToString() const {
   string s = "Task {\n\t";
   for (auto& a : this->argv_) {
     s += a + " ";
@@ -30,7 +30,7 @@ string Task::ToString() {
   return s;
 }
 
-char** Task::C_Args() {
+char** Task::C_Args() const {
   char** args = new char*[this->argv_.size() + 1];
   for (size_t i = 0; i < this->argv_.size(); i++) {
     args[i] = strdup(this->argv_[i].c_str());
@@ -39,7 +39,7 @@ char** Task::C_Args() {
   return args;
 }
 
-pid_t Task::Exec(Environment& env) {
+pid_t Task::Exec(Environment& env) const {
   if (this->argv_.empty()) {
     return ExecError::kSuccess;
   }
