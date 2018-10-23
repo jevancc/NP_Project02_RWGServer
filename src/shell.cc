@@ -10,7 +10,7 @@
 using namespace std;
 
 namespace np {
-Shell::Shell() { setenv("PATH", "bin:.", 1); }
+Shell::Shell() { builtin::setenv({"setenv", "PATH", "bin:."}, this->env_); }
 
 void Shell::Run() {
   signal(SIGCHLD, [](int signo) {
