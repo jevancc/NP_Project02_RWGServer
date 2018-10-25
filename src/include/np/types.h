@@ -81,18 +81,20 @@ class Environment;
 class Task {
  private:
   vector<string> argv_;
+  optional<Pipe> in_pipe_;
   IOOption stdin_;
   IOOption stdout_;
   IOOption stderr_;
 
  public:
+  Task() : in_pipe_(nullopt){};
   friend class Command;
   string ToString() const;
   const string& GetFile() const { return this->argv_[0]; }
   const IOOption& GetStdin() const { return this->stdin_; }
   const IOOption& GetStdout() const { return this->stdout_; }
   const IOOption& GetStderr() const { return this->stderr_; }
-  pid_t Exec(Environment& env) const;
+  pid_t Exec(Environment& env);
   char** C_Args() const;
 };
 

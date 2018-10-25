@@ -39,7 +39,7 @@ char** Task::C_Args() const {
   return args;
 }
 
-pid_t Task::Exec(Environment& env) const {
+pid_t Task::Exec(Environment& env) {
   if (this->argv_.empty()) {
     return ExecError::kSuccess;
   }
@@ -48,8 +48,10 @@ pid_t Task::Exec(Environment& env) const {
     return status;
   }
 
-  Pipe last_pipe = env.GetPipe();
-  env.SetPipe(0, Pipe::Create());
+  if (!this->in_pipe_) {
+    this->in_pipe_ = optional<Pipe>(env.GetPipe(0));
+    env.SetPipe(0, Pipe::Create());
+  }
   if (this->stdout_.type == IO::kPipe) {
     env.CreatePipe(this->stdout_.line);
   }
@@ -59,20 +61,19 @@ pid_t Task::Exec(Environment& env) const {
 
   pid_t pid = fork();
   if (pid < 0) {
-    env.GetPipe().Close();
-    env.SetPipe(0, last_pipe);
     return ExecError::kForkFailed;
   } else if (pid > 0) {
     // parent process
-    last_pipe.Close();
+    this->in_pipe_->Close();
+    this->in_pipe_ = nullopt;
     env.AddChildProcess(0, pid);
     return ExecError::kSuccess;
   } else {
     // child process
     switch (this->stdin_.type) {
       case IO::kInherit:
-        if (last_pipe.IsEnable()) {
-          last_pipe.DupIn2(STDIN_FILENO);
+        if (this->in_pipe_->IsEnable()) {
+          this->in_pipe_->DupIn2(STDIN_FILENO);
         }
         break;
       case IO::kPipe:
@@ -106,7 +107,7 @@ pid_t Task::Exec(Environment& env) const {
         break;
     }
 
-    last_pipe.Close();
+    this->in_pipe_->Close();
     env.CloseAllPipes();
 
     const char* file = this->argv_[0].c_str();
