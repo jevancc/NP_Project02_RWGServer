@@ -1,7 +1,7 @@
 {
   "name": "np_project01_npshell",
   "version": "1.0.0",
-  "description": "NCTUCS Network Programming 2018 Fall Project 01 - NPShell",
+  "description": "NCTUCS Network Programming 2018 Fall Project 02 - RWGServer",
   "scripts": {
     "test": "mocha",
     "format": "npm run format:js && npm run format:cpp",

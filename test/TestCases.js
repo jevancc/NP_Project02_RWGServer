@@ -6,7 +6,7 @@ const net = require("net");
 const child_process = require("child_process");
 const util = require("util");
 
-const execPath = path.resolve("npshell");
+const execPath = path.resolve("npshell_server");
 const workSpaceDir = path.resolve("test/_workSpace");
 
 let serverPortStart = 12300;
@@ -40,10 +40,14 @@ describe("TestCases", () => {
             );
 
             let serverPort = serverPortStart++;
-            let shellServerProcess = child_process.spawn(execPath, [serverPort], {
-              silent: true,
-              cwd: caseWorkSpace
-            });
+            let shellServerProcess = child_process.spawn(
+              execPath,
+              [serverPort],
+              {
+                silent: true,
+                cwd: caseWorkSpace
+              }
+            );
 
             let testCaseDir = path.join(testItemDir, c.name);
             it(c.name, async () => {
@@ -52,11 +56,11 @@ describe("TestCases", () => {
                 client.write(fs.readFileSync(path.join(testCaseDir, "in.txt")));
                 setTimeout(() => {
                   client.destroy();
-                }, 5000);
+                }, 9000);
               });
 
               let shellOutput = "";
-              client.on("data", function(data) {
+              client.on("data", data => {
                 shellOutput += data;
               });
 
@@ -74,7 +78,7 @@ describe("TestCases", () => {
             }).timeout(10000);
           });
 
-        after(function() {
+        after(() => {
           shell.rm("-Rf", itemWorkSpace);
         });
       });

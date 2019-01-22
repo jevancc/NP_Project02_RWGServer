@@ -5,7 +5,7 @@ INCLUDES = \
 	-Ilib/optional-lite/include
 
 OUT = ./build
-EXE = $(OUT)/npshell
+EXE = $(OUT)/npshell_server
 SRCS = ./src
 OBJS = $(OUT)/objs
 
@@ -14,8 +14,8 @@ ALL := $(patsubst $(SRCS)/%.cc,$(OBJS)/%.o,$(wildcard $(SRCS)/*.cc))
 .PHONY: build
 
 all: build
-	@cp $(EXE) ./npshell
-	@chmod 775 ./npshell
+	@cp $(EXE) ./npshell_server
+	@chmod 775 ./npshell_server
 
 $(OBJS)/%.o: $(SRCS)/%.cc  $(shell find $(SRCS)/include -name "*.h")
 	@mkdir -p $(OBJS)
