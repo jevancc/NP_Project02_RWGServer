@@ -47,7 +47,7 @@ int main(int argc, char** argv, char** envp) {
 
     char ip[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &(client_info.sin_addr), ip, INET_ADDRSTRLEN);
-    printf("Connection from %s %d\n", ip, client_info.sin_port);
+    cout << "Connection from " << ip << " " << client_info.sin_port << endl;
     fflush(stdout);
 
     pid_t proc = fork();

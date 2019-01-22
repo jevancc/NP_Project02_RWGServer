@@ -28,7 +28,6 @@ void Shell::Run() {
     }
 
     Command command(input);
-
     if (command.Parse().empty()) {
       continue;
     }

@@ -17,13 +17,13 @@ void Environment::SetPipe(int line, shared_ptr<Pipe> pipe) {
 }
 void Environment::CreatePipe(int line) {
   int line_idx = (line + current_line_) % kMaxDelayedPipe;
-  if (!this->pipes_ || !this->pipes_[line_idx]->IsEnable()) {
+  if (!this->pipes_[line_idx] || !this->pipes_[line_idx]->IsEnable()) {
     this->pipes_[line_idx] = Pipe::Create();
   }
 }
 void Environment::ClosePipe(int line) {
-  int index = (line + current_line_) % kMaxDelayedPipe;
-  if (this->pipes_[index]) {
+  int line_idx = (line + current_line_) % kMaxDelayedPipe;
+  if (this->pipes_[line_idx]) {
     this->pipes_[(line + current_line_) % kMaxDelayedPipe]->Close();
   }
 }
