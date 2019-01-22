@@ -1,6 +1,6 @@
-#include <np/builtin.h>
-#include <np/constants.h>
-#include <np/types.h>
+#include <np/shell/builtin.h>
+#include <np/shell/constants.h>
+#include <np/shell/types.h>
 #include <signal.h>
 #include <cstdlib>
 #include <functional>
@@ -11,17 +11,18 @@
 using namespace std;
 
 namespace np {
+namespace shell {
 namespace builtin {
 
 const map<string,
-          function<np::ExecError(const vector<string>& argv, Environment& env)>>
+          function<ExecError(const vector<string>& argv, Environment& env)>>
     kCommands{
         {"exit", exit},
         {"printenv", printenv},
         {"setenv", setenv},
     };
 
-np::ExecError Exec(const vector<string>& argv, Environment& env) {
+ExecError Exec(const vector<string>& argv, Environment& env) {
   if (argv.empty()) {
     return ExecError::kSuccess;
   }
@@ -34,17 +35,17 @@ np::ExecError Exec(const vector<string>& argv, Environment& env) {
   }
 }
 
-np::ExecError exit(const vector<string>& argv, Environment& env) {
+ExecError exit(const vector<string>& argv, Environment& env) {
   for (int i = 0; i < kMaxDelayedPipe; i++) {
-    for (auto& pid : env.GetChildProcess(i)) {
+    for (auto& pid : env.GetChildProcesses(i)) {
       ::kill(pid, SIGKILL);
     }
   }
   ::exit(0);
-  return np::ExecError::kSuccess;
+  return ExecError::kSuccess;
 }
 
-np::ExecError printenv(const vector<string>& argv, Environment& env) {
+ExecError printenv(const vector<string>& argv, Environment& env) {
   if (argv.size() < 2) {
     cerr << "Invalid arguments" << endl;
   } else {
@@ -55,17 +56,18 @@ np::ExecError printenv(const vector<string>& argv, Environment& env) {
       cout << endl;
     }
   }
-  return np::ExecError::kSuccess;
+  return ExecError::kSuccess;
 }
 
-np::ExecError setenv(const vector<string>& argv, Environment& env) {
+ExecError setenv(const vector<string>& argv, Environment& env) {
   if (argv.size() < 3) {
     cerr << "Invalid arguments" << endl;
   } else {
     ::setenv(argv[1].c_str(), argv[2].c_str(), 1);
   }
-  return np::ExecError::kSuccess;
+  return ExecError::kSuccess;
 }
 
 }  // namespace builtin
+}  // namespace shell
 }  // namespace np

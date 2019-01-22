@@ -1,5 +1,5 @@
-#ifndef _NP_UTILS_H_
-#define _NP_UTILS_H_
+#ifndef _NP_SHELL_UTILS_H_
+#define _NP_SHELL_UTILS_H_
 
 #include <algorithm>
 #include <cctype>

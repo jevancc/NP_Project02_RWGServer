@@ -9,14 +9,7 @@ EXE = $(OUT)/npshell
 SRCS = ./src
 OBJS = $(OUT)/objs
 
-ALL := \
-	$(OBJS)/main.o \
-	$(OBJS)/shell.o \
-	$(OBJS)/builtin.o \
-	$(OBJS)/pipe.o \
-	$(OBJS)/command.o \
-	$(OBJS)/task.o \
-	$(OBJS)/environment.o
+ALL := $(patsubst $(SRCS)/%.cc,$(OBJS)/%.o,$(wildcard $(SRCS)/*.cc))
 
 .PHONY: build
 
@@ -24,7 +17,7 @@ all: build
 	@cp $(EXE) ./npshell
 	@chmod 775 ./npshell
 
-$(OBJS)/%.o: $(SRCS)/%.cc
+$(OBJS)/%.o: $(SRCS)/%.cc  $(shell find $(SRCS)/include -name "*.h")
 	@mkdir -p $(OBJS)
 	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 

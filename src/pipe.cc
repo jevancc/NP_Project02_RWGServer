@@ -1,6 +1,7 @@
-#include <np/types.h>
+#include <np/shell/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <memory>
 #include <nonstd/optional.hpp>
 #include <vector>
 using namespace std;
@@ -11,13 +12,15 @@ const int kPipeIn = 0;
 const int kPipeOut = 1;
 
 namespace np {
+namespace shell {
 
 Pipe::Pipe() { this->fd_[0] = this->fd_[1] = -1; }
+Pipe::~Pipe() { this->Close(); }
 
-Pipe Pipe::Create() {
-  Pipe p;
-  if (pipe(p.fd_) < 0) {
-    throw runtime_error("fail to create pipe");
+shared_ptr<Pipe> Pipe::Create() {
+  auto p = make_shared<Pipe>();
+  if (pipe(p->fd_) < 0) {
+    throw runtime_error("failed to create pipe");
   } else {
     return p;
   }
@@ -48,4 +51,5 @@ int Pipe::Close() {
   }
   return status;
 }
+}  // namespace shell
 }  // namespace np

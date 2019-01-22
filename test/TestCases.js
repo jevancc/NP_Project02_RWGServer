@@ -2,9 +2,14 @@ const should = require("should");
 const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
+const net = require("net");
+const child_process = require("child_process");
+const util = require("util");
 
 const execPath = path.resolve("npshell");
 const workSpaceDir = path.resolve("test/_workSpace");
+
+let serverPortStart = 12300;
 
 describe("TestCases", () => {
   shell.cd("test");
@@ -34,19 +39,38 @@ describe("TestCases", () => {
               caseWorkSpace
             );
 
+            let serverPort = serverPortStart++;
+            let shellServerProcess = child_process.spawn(execPath, [serverPort], {
+              silent: true,
+              cwd: caseWorkSpace
+            });
+
             let testCaseDir = path.join(testItemDir, c.name);
-            it(c.name, () => {
-              shell
-                .exec(
-                  `${execPath} < ${path.join(testCaseDir, "in.txt")} 2>&1`,
-                  {
-                    silent: true,
-                    cwd: caseWorkSpace
-                  }
-                )
-                .stdout.should.be.eql(
-                  fs.readFileSync(path.join(testCaseDir, "out.txt")).toString()
-                );
+            it(c.name, async () => {
+              let client = new net.Socket();
+              client.connect(serverPort, "localhost", () => {
+                client.write(fs.readFileSync(path.join(testCaseDir, "in.txt")));
+                setTimeout(() => {
+                  client.destroy();
+                }, 5000);
+              });
+
+              let shellOutput = "";
+              client.on("data", function(data) {
+                shellOutput += data;
+              });
+
+              return new Promise(resolve => {
+                client.on("close", () => {
+                  shellServerProcess.kill();
+                  shellOutput.should.be.eql(
+                    fs
+                      .readFileSync(path.join(testCaseDir, "out.txt"))
+                      .toString()
+                  );
+                  resolve();
+                });
+              });
             }).timeout(10000);
           });
 

@@ -1,6 +1,6 @@
-#include <np/builtin.h>
-#include <np/shell.h>
-#include <np/types.h>
+#include <np/shell/builtin.h>
+#include <np/shell/shell.h>
+#include <np/shell/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <cstdlib>
@@ -10,6 +10,7 @@
 using namespace std;
 
 namespace np {
+namespace shell {
 Shell::Shell() { builtin::setenv({"setenv", "PATH", "bin:."}, this->env_); }
 
 void Shell::Run() {
@@ -27,11 +28,13 @@ void Shell::Run() {
     }
 
     Command command(input);
+
     if (command.Parse().empty()) {
       continue;
     }
     for (auto task : command.Parse()) {
       int status;
+
       while ((status = task.Exec(this->env_)) == ExecError::kForkFailed) {
         usleep(1000);
       }
@@ -45,17 +48,19 @@ void Shell::Run() {
           throw runtime_error("Unexpected error happened");
       }
     }
+
     auto last_task = *command.Parse().rbegin();
     if (last_task.GetStdout().type == IO::kPipe) {
       this->env_.AddChildProcesses(last_task.GetStdout().line,
-                                   this->env_.GetChildProcess());
+                                   this->env_.GetChildProcesses());
     }
 
-    for (auto child_pid : this->env_.GetChildProcess()) {
+    for (auto child_pid : this->env_.GetChildProcesses()) {
       int status;
       waitpid(child_pid, &status, 0);
     }
     this->env_.GotoNextLine();
   }
 }
+}  // namespace shell
 }  // namespace np

@@ -1,8 +1,9 @@
-#ifndef _NP_TYPES_H_
-#define _NP_TYPES_H_
+#ifndef _NP_SHELL_TYPES_H_
+#define _NP_SHELL_TYPES_H_
 
-#include <np/constants.h>
+#include <np/shell/constants.h>
 #include <map>
+#include <memory>
 #include <nonstd/optional.hpp>
 #include <string>
 #include <tuple>
@@ -13,14 +14,21 @@ using nonstd::nullopt;
 using nonstd::optional;
 
 namespace np {
+namespace shell {
+class Pipe;
+class IOOption;
+class Command;
+class Task;
+class Environment;
 
 class Pipe {
  private:
   int fd_[2];
 
  public:
-  static Pipe Create();
+  static shared_ptr<Pipe> Create();
   Pipe();
+  ~Pipe();
 
   optional<int> In();
   optional<int> Out();
@@ -66,7 +74,6 @@ class IOOption {
   }
 };
 
-class Task;
 class Command {
  private:
   string raw_;
@@ -77,17 +84,16 @@ class Command {
   const vector<Task>& Parse() const { return this->parsed_commands_; }
 };
 
-class Environment;
 class Task {
  private:
   vector<string> argv_;
-  optional<Pipe> in_pipe_;
+  shared_ptr<Pipe> in_pipe_;
   IOOption stdin_;
   IOOption stdout_;
   IOOption stderr_;
 
  public:
-  Task() : in_pipe_(nullopt){};
+  Task(){};
   friend class Command;
   string ToString() const;
   const string& GetFile() const { return this->argv_[0]; }
@@ -107,47 +113,26 @@ enum ExecError {
 
 class Environment {
  private:
-  Pipe pipes_[kMaxDelayedPipe];
+  shared_ptr<Pipe> pipes_[kMaxDelayedPipe];
   vector<pid_t> child_processes_[kMaxDelayedPipe];
   int current_line_;
 
  public:
   Environment() : current_line_(0) {}
 
-  Pipe& GetPipe(int line = 0) {
-    return this->pipes_[(line + current_line_) % kMaxDelayedPipe];
-  }
-  void SetPipe(int line, Pipe pipe) {
-    this->pipes_[(line + current_line_) % kMaxDelayedPipe] = pipe;
-  }
-  void CreatePipe(int line) {
-    int line_idx = (line + current_line_) % kMaxDelayedPipe;
-    if (!this->pipes_[line_idx].IsEnable()) {
-      this->pipes_[line_idx] = Pipe::Create();
-    }
-  }
-  void ClosePipe(int line) {
-    this->pipes_[(line + current_line_) % kMaxDelayedPipe].Close();
-  }
+  shared_ptr<Pipe> GetPipe(int line = 0);
+  void SetPipe(int line, shared_ptr<Pipe> pipe);
+  void CreatePipe(int line);
+  void ClosePipe(int line);
   void CloseAllPipes();
 
-  vector<pid_t>& GetChildProcess(int line = 0) {
-    return this->child_processes_[(line + current_line_) % kMaxDelayedPipe];
-  }
-  void AddChildProcess(int line, pid_t pid) {
-    int line_idx = (line + current_line_) % kMaxDelayedPipe;
-    this->child_processes_[line_idx].push_back(pid);
-  }
-  void AddChildProcesses(int line, vector<pid_t>& pids) {
-    int line_idx = (line + current_line_) % kMaxDelayedPipe;
-    this->child_processes_[line_idx].insert(
-        this->child_processes_[line_idx].end(), pids.begin(), pids.end());
-    pids.clear();
-  }
+  vector<pid_t>& GetChildProcesses(int line = 0);
+  void AddChildProcess(int line, pid_t pid);
+  void AddChildProcesses(int line, vector<pid_t>& pids);
 
   void GotoNextLine();
 };
-
+}  // namespace shell
 }  // namespace np
 
 #endif

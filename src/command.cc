@@ -1,4 +1,4 @@
-#include <np/types.h>
+#include <np/shell/types.h>
 #include <np/utils.h>
 #include <iostream>
 #include <regex>
@@ -8,6 +8,7 @@
 using namespace std;
 
 namespace np {
+namespace shell {
 Command::Command(string command) {
   static regex pipe_regex(R"([^|!]+((\|\d+|!\d+)\s*$|\||$))");
   static regex argv_regex(R"((\||!)(\d+)?|(>)?\s*(\S+))");
@@ -62,5 +63,5 @@ Command::Command(string command) {
     this->parsed_commands_.push_back(task);
   }
 }
-
+}  // namespace shell
 }  // namespace np

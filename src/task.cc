@@ -1,6 +1,6 @@
 #include <fcntl.h>
-#include <np/builtin.h>
-#include <np/types.h>
+#include <np/shell/builtin.h>
+#include <np/shell/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +17,7 @@
 using namespace std;
 
 namespace np {
+namespace shell {
 string Task::ToString() const {
   string s = "Task {\n\t";
   for (auto& a : this->argv_) {
@@ -49,7 +50,7 @@ pid_t Task::Exec(Environment& env) {
   }
 
   if (!this->in_pipe_) {
-    this->in_pipe_ = optional<Pipe>(env.GetPipe(0));
+    this->in_pipe_ = env.GetPipe(0);
     env.SetPipe(0, Pipe::Create());
   }
   if (this->stdout_.type == IO::kPipe) {
@@ -64,15 +65,17 @@ pid_t Task::Exec(Environment& env) {
     return ExecError::kForkFailed;
   } else if (pid > 0) {
     // parent process
-    this->in_pipe_->Close();
-    this->in_pipe_ = nullopt;
+    if (this->in_pipe_) {
+      this->in_pipe_->Close();
+      this->in_pipe_ = nullptr;
+    }
     env.AddChildProcess(0, pid);
     return ExecError::kSuccess;
   } else {
     // child process
     switch (this->stdin_.type) {
       case IO::kInherit:
-        if (this->in_pipe_->IsEnable()) {
+        if (this->in_pipe_ && this->in_pipe_->IsEnable()) {
           this->in_pipe_->DupIn2(STDIN_FILENO);
         }
         break;
@@ -88,7 +91,7 @@ pid_t Task::Exec(Environment& env) {
       case IO::kInherit:
         break;
       case IO::kPipe:
-        env.GetPipe(this->stdout_.line).DupOut2(STDOUT_FILENO);
+        env.GetPipe(this->stdout_.line)->DupOut2(STDOUT_FILENO);
         break;
       case IO::kFile:
         int fd = open(this->stdout_.file.c_str(),
@@ -101,13 +104,15 @@ pid_t Task::Exec(Environment& env) {
       case IO::kInherit:
         break;
       case IO::kPipe:
-        env.GetPipe(this->stderr_.line).DupOut2(STDERR_FILENO);
+        env.GetPipe(this->stderr_.line)->DupOut2(STDERR_FILENO);
         break;
       case IO::kFile:  // NOTE: Not in spec
         break;
     }
 
-    this->in_pipe_->Close();
+    if (this->in_pipe_) {
+      this->in_pipe_->Close();
+    }
     env.CloseAllPipes();
 
     const char* file = this->argv_[0].c_str();
@@ -119,4 +124,5 @@ pid_t Task::Exec(Environment& env) {
     return ExecError::kSuccess;
   }
 }
+}  // namespace shell
 }  // namespace np
