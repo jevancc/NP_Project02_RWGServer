@@ -1,5 +1,6 @@
 #include <fcntl.h>
 #include <np/shell/builtin.h>
+#include <np/shell/shell.h>
 #include <np/shell/types.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,24 +41,25 @@ char** Task::C_Args() const {
   return args;
 }
 
-pid_t Task::Exec(Environment& env) {
+pid_t Task::Execute(Shell& shell) {
   if (this->argv_.empty()) {
     return ExecError::kSuccess;
   }
   ExecError status;
-  if ((status = builtin::Exec(this->argv_, env)) != ExecError::kFileNotFound) {
+  if ((status = builtin::Execute(this->argv_, shell)) !=
+      ExecError::kFileNotFound) {
     return status;
   }
 
   if (!this->in_pipe_) {
-    this->in_pipe_ = env.GetPipe(0);
-    env.SetPipe(0, Pipe::Create());
+    this->in_pipe_ = shell.env.GetDelayedPipe(0);
+    shell.env.SetDelayedPipe(0, Pipe::Create());
   }
-  if (this->stdout_.type == IO::kPipe) {
-    env.CreatePipe(this->stdout_.line);
+  if (this->stdout_.type == IO::kDelayedPipe) {
+    shell.env.CreateDelayedPipe(this->stdout_.i_data);
   }
-  if (this->stderr_.type == IO::kPipe) {
-    env.CreatePipe(this->stderr_.line);
+  if (this->stderr_.type == IO::kDelayedPipe) {
+    shell.env.CreateDelayedPipe(this->stderr_.i_data);
   }
 
   pid_t pid = fork();
@@ -69,9 +71,13 @@ pid_t Task::Exec(Environment& env) {
       this->in_pipe_->Close();
       this->in_pipe_ = nullptr;
     }
-    env.AddChildProcess(0, pid);
+    shell.env.AddDelayedChildProcess(0, pid);
     return ExecError::kSuccess;
   } else {
+    dup2(shell.GetSockfd(), STDIN_FILENO);
+    dup2(shell.GetSockfd(), STDOUT_FILENO);
+    dup2(shell.GetSockfd(), STDERR_FILENO);
+
     // child process
     switch (this->stdin_.type) {
       case IO::kInherit:
@@ -79,7 +85,7 @@ pid_t Task::Exec(Environment& env) {
           this->in_pipe_->DupIn2(STDIN_FILENO);
         }
         break;
-      case IO::kPipe:
+      case IO::kDelayedPipe:
         // unreachable
         throw runtime_error("unreachable");
         break;
@@ -90,11 +96,11 @@ pid_t Task::Exec(Environment& env) {
     switch (this->stdout_.type) {
       case IO::kInherit:
         break;
-      case IO::kPipe:
-        env.GetPipe(this->stdout_.line)->DupOut2(STDOUT_FILENO);
+      case IO::kDelayedPipe:
+        shell.env.GetDelayedPipe(this->stdout_.i_data)->DupOut2(STDOUT_FILENO);
         break;
       case IO::kFile:
-        int fd = open(this->stdout_.file.c_str(),
+        int fd = open(this->stdout_.s_data.c_str(),
                       (O_WRONLY | O_CREAT | O_TRUNC), 0644);
         dup2(fd, STDOUT_FILENO);
         break;
@@ -103,8 +109,8 @@ pid_t Task::Exec(Environment& env) {
     switch (this->stderr_.type) {
       case IO::kInherit:
         break;
-      case IO::kPipe:
-        env.GetPipe(this->stderr_.line)->DupOut2(STDERR_FILENO);
+      case IO::kDelayedPipe:
+        shell.env.GetDelayedPipe(this->stderr_.i_data)->DupOut2(STDERR_FILENO);
         break;
       case IO::kFile:  // NOTE: Not in spec
         break;
@@ -113,7 +119,12 @@ pid_t Task::Exec(Environment& env) {
     if (this->in_pipe_) {
       this->in_pipe_->Close();
     }
-    env.CloseAllPipes();
+    shell.env.CloseAllDelayedPipes();
+    for (auto& user_w : shell.console_.GetUsers()) {
+      if (auto user = user_w.lock()) {
+        user->CloseSockfd();
+      }
+    }
 
     const char* file = this->argv_[0].c_str();
     char** arg = this->C_Args();

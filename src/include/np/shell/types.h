@@ -1,6 +1,19 @@
 #ifndef _NP_SHELL_TYPES_H_
 #define _NP_SHELL_TYPES_H_
 
+namespace np {
+namespace shell {
+class Pipe;
+class IOOption;
+class Command;
+class Task;
+class Environment;
+class Shell;
+class ShellConsole;
+}  // namespace shell
+}  // namespace np
+
+#include <np/shell/builtin.h>
 #include <np/shell/constants.h>
 #include <map>
 #include <memory>
@@ -10,16 +23,10 @@
 #include <utility>
 #include <vector>
 using namespace std;
-using nonstd::nullopt;
 using nonstd::optional;
 
 namespace np {
 namespace shell {
-class Pipe;
-class IOOption;
-class Command;
-class Task;
-class Environment;
 
 class Pipe {
  private:
@@ -41,18 +48,33 @@ class Pipe {
   inline optional<int> O() { return this->Out(); }
 };
 
-enum IO {
-  kInherit = 0,
-  kPipe,
-  kFile,
-};
-
 class IOOption {
  public:
   IO type;
-  string file;
-  int line;
+  int i_data;
+  string s_data;
   IOOption() : type(IO::kInherit) {}
+
+  void SetInherit() {
+    this->type = kInherit;
+    this->i_data = 0;
+    string().swap(this->s_data);
+  }
+  void SetDelayedPipe(int line) {
+    this->type = kDelayedPipe;
+    this->i_data = line;
+    string().swap(this->s_data);
+  }
+  void SetUserPipe(int uid) {
+    this->type = kUserPipe;
+    this->i_data = uid;
+    string().swap(this->s_data);
+  }
+  void SetFile(const string& s) {
+    this->type = kFile;
+    this->i_data = -1;
+    this->s_data = s;
+  }
 
   string ToString() const {
     char s[32];
@@ -60,11 +82,14 @@ class IOOption {
       case IO::kInherit:
         sprintf(s, "Inherit");
         break;
-      case IO::kPipe:
-        sprintf(s, "Pipe %d", this->line);
+      case IO::kDelayedPipe:
+        sprintf(s, "Delayed Pipe %d", this->i_data);
+        break;
+      case IO::kUserPipe:
+        sprintf(s, "User Pipe %d", this->i_data);
         break;
       case IO::kFile:
-        sprintf(s, "File \"%s\"", this->file.c_str());
+        sprintf(s, "File \"%s\"", this->s_data.c_str());
         break;
       default:
         sprintf(s, "Unknown type[%d]", this->type);
@@ -100,39 +125,58 @@ class Task {
   const IOOption& GetStdin() const { return this->stdin_; }
   const IOOption& GetStdout() const { return this->stdout_; }
   const IOOption& GetStderr() const { return this->stderr_; }
-  pid_t Exec(Environment& env);
+  pid_t Execute(Shell& shell);
   char** C_Args() const;
-};
-
-enum ExecError {
-  kSuccess = 0,
-  kUnknown = -1,
-  kFileNotFound = -2,
-  kForkFailed = -3,
 };
 
 class Environment {
  private:
-  shared_ptr<Pipe> pipes_[kMaxDelayedPipe];
-  vector<pid_t> child_processes_[kMaxDelayedPipe];
+  int uid_;
   int current_line_;
+  string name_;
+
+  shared_ptr<Pipe> delayed_pipes_[kMaxDelayedPipes];
+  shared_ptr<Pipe> user_pipes_[kMaxShellUsers];
+  vector<pid_t> delayed_child_processes_[kMaxDelayedPipes];
+  vector<pid_t> user_child_processes_[kMaxShellUsers];
+  map<string, string> variables_;
 
  public:
-  Environment() : current_line_(0) {}
+  Environment(int uid) : uid_(uid), current_line_(0), name_("(no name)") {}
+  int GetUid() const { return this->uid_; }
+  void SetName(const string& s) { this->name_ = s; }
+  const string& GetName() const { return this->name_; }
 
-  shared_ptr<Pipe> GetPipe(int line = 0);
-  void SetPipe(int line, shared_ptr<Pipe> pipe);
-  void CreatePipe(int line);
-  void ClosePipe(int line);
-  void CloseAllPipes();
+  shared_ptr<Pipe> GetDelayedPipe(int line = 0);
+  void SetDelayedPipe(int line, shared_ptr<Pipe> pipe);
+  void CreateDelayedPipe(int line);
+  void CloseDelayedPipe(int line);
+  void CloseAllDelayedPipes();
 
-  vector<pid_t>& GetChildProcesses(int line = 0);
-  void AddChildProcess(int line, pid_t pid);
-  void AddChildProcesses(int line, vector<pid_t>& pids);
+  shared_ptr<Pipe> GetUserPipe(int uid = 0);
+  void SetUserPipe(int uid, shared_ptr<Pipe> pipe);
+  void CreateUserPipe(int uid);
+  void CloseUserPipe(int uid);
+  void CloseAllUserPipes();
+
+  void SetVariable(const string& var, const string& val);
+  const string& GetVariable(const string& var) const;
+  const map<string, string>& GetVariables() const;
+
+  vector<pid_t>& GetDelayedChildProcesses(int line = 0);
+  void AddDelayedChildProcess(int line, pid_t pid);
+  void AddDelayedChildProcesses(int line, vector<pid_t>& pids);
+
+  vector<pid_t>& GetUserChildProcesses(int uid = 0);
+  void AddUserChildProcess(int uid, pid_t pid);
+  void AddUserChildProcesses(int uid, vector<pid_t>& pids);
 
   void GotoNextLine();
 };
 }  // namespace shell
 }  // namespace np
+
+#include <np/shell/shell.h>
+#include <np/shell/shell_console.h>
 
 #endif

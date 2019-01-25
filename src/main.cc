@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <np/shell/shell.h>
+#include <np/shell/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,6 +13,12 @@
 using namespace std;
 
 int main(int argc, char** argv, char** envp) {
+  signal(SIGCHLD, [](int signo) {
+    int status;
+    while (waitpid(-1, &status, WNOHANG) > 0)
+      ;
+  });
+
   if (argc < 2) {
     throw runtime_error("invalid argument: no port specified");
   }
@@ -24,7 +30,7 @@ int main(int argc, char** argv, char** envp) {
   }
 
   // socket的連線
-  struct sockaddr_in server_info, client_info;
+  struct sockaddr_in server_info;
 
   bzero(&server_info, sizeof(server_info));
   server_info.sin_family = PF_INET;
@@ -39,32 +45,11 @@ int main(int argc, char** argv, char** envp) {
   bind(sockfd, (struct sockaddr*)&server_info, sizeof(server_info));
   listen(sockfd, 5);
 
-  while (true) {
-    int addrlen = sizeof(client_info);
-
-    int clientfd =
-        accept(sockfd, (struct sockaddr*)&client_info, (socklen_t*)&addrlen);
-
-    char ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(client_info.sin_addr), ip, INET_ADDRSTRLEN);
-    cout << "Connection from " << ip << " " << client_info.sin_port << endl;
-    fflush(stdout);
-
-    pid_t proc = fork();
-    if (proc == 0) {
-      dup2(clientfd, STDOUT_FILENO);
-      dup2(clientfd, STDERR_FILENO);
-      dup2(clientfd, STDIN_FILENO);
-
-      close(clientfd);
-      np::shell::Shell shell;
-      shell.Run();
-    } else {
-      int status;
-      close(clientfd);
-      waitpid(proc, &status, 0);
-      cout << "Connection closed" << endl;
-    }
-  }
+  // fd_set readfds, sockfds;
+  // FD_ZERO(readfds);
+  // FD_ZERO(sockfds);
+  // FD_SET(sockfd, &sockfds);
+  np::shell::ShellConsole shell_console(sockfd, sockfd);
+  shell_console.Run();
   return 0;
 }

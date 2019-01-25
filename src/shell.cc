@@ -1,6 +1,8 @@
+#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <np/shell/builtin.h>
-#include <np/shell/shell.h>
 #include <np/shell/types.h>
+#include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <cstdlib>
@@ -11,55 +13,78 @@ using namespace std;
 
 namespace np {
 namespace shell {
-Shell::Shell() { builtin::setenv({"setenv", "PATH", "bin:."}, this->env_); }
 
-void Shell::Run() {
-  signal(SIGCHLD, [](int signo) {
-    int status;
-    while (waitpid(-1, &status, WNOHANG) > 0)
-      ;
-  });
+Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
+             ShellConsole& console)
+    : console_(console), env(uid) {
+  inet_ntop(AF_INET, &(client_info->sin_addr), this->addr_, INET_ADDRSTRLEN);
+  sprintf(this->port_, "%d", client_info->sin_port);
+  this->sockfd_ = sockfd;
+  builtin::setenv({"setenv", "PATH", "bin:."}, *this);
+  builtin::setenv({"setenv", "LANG", "en_US.UTF-8"}, *this);
+}
 
-  string input;
-  while (true) {
-    cout << "% ";
-    if (!getline(cin, input)) {
-      builtin::exit({"exit"}, this->env_);
-    }
+ssize_t Shell::SendWelcomeMessage_() const {
+  static const string welcome_message(
+      "****************************************\n"
+      "** Welcome to the information server. **\n"
+      "****************************************\n");
+  return this->Send(welcome_message);
+}
 
-    Command command(input);
-    if (command.Parse().empty()) {
-      continue;
-    }
-    for (auto task : command.Parse()) {
-      int status;
+ssize_t Shell::SendPrompt_() const {
+  static const string prompt("% ");
+  return this->Send(prompt);
+}
 
-      while ((status = task.Exec(this->env_)) == ExecError::kForkFailed) {
-        usleep(1000);
-      }
-      switch (status) {
-        case ExecError::kFileNotFound:
-          cout << "Unknown command: [" << task.GetFile() << "]." << endl;
-          break;
-        case ExecError::kSuccess:
-          break;
-        default:
-          throw runtime_error("Unexpected error happened");
-      }
-    }
+ssize_t Shell::Send(const string& s) const {
+  return this->console_.Send2Fd(this->sockfd_, s);
+}
 
-    auto last_task = *command.Parse().rbegin();
-    if (last_task.GetStdout().type == IO::kPipe) {
-      this->env_.AddChildProcesses(last_task.GetStdout().line,
-                                   this->env_.GetChildProcesses());
-    }
+void Shell::Execute(string input) {
+  // cout << "% ";
+  // if (!getline(cin, input)) {
+  //   builtin::exit({"exit"}, this->env);
+  // }
 
-    for (auto child_pid : this->env_.GetChildProcesses()) {
-      int status;
-      waitpid(child_pid, &status, 0);
-    }
-    this->env_.GotoNextLine();
+  ::clearenv();
+  for (auto& vp : this->env.GetVariables()) {
+    ::setenv(vp.first.c_str(), vp.second.c_str(), 1);
   }
+
+  Command command(input);
+  if (command.Parse().empty()) {
+    return;
+  }
+  for (auto task : command.Parse()) {
+    int status;
+
+    while ((status = task.Execute(*this)) == ExecError::kForkFailed) {
+      usleep(1000);
+    }
+    switch (status) {
+      case ExecError::kFileNotFound:
+        cout << "Unknown command: [" << task.GetFile() << "]." << endl;
+        break;
+      case ExecError::kSuccess:
+        break;
+      default:
+        throw runtime_error("Unexpected error happened");
+    }
+  }
+
+  auto last_task = *command.Parse().rbegin();
+  if (last_task.GetStdout().type == IO::kDelayedPipe) {
+    this->env.AddDelayedChildProcesses(last_task.GetStdout().i_data,
+                                       this->env.GetDelayedChildProcesses());
+  }
+
+  for (auto child_pid : this->env.GetDelayedChildProcesses()) {
+    int status;
+    waitpid(child_pid, &status, 0);
+  }
+
+  this->env.GotoNextLine();
 }
 }  // namespace shell
 }  // namespace np

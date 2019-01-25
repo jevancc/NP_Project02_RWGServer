@@ -26,6 +26,10 @@ inline string& trim(string& s) {
   rtrim(s);
   return s;
 }
+
+inline bool is_prefix(const string& s1, const string& s2) {
+  return s2.substr(0, s1.size()) == s1;
+}
 }  // namespace utils
 }  // namespace np
 
