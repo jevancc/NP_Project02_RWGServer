@@ -20,7 +20,7 @@ int main(int argc, char** argv, char** envp) {
   });
 
   if (argc < 2) {
-    throw runtime_error("invalid argument: no port specified");
+    throw invalid_argument("no port specified");
   }
   int sockfd = 0;
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -29,7 +29,6 @@ int main(int argc, char** argv, char** envp) {
     throw runtime_error("failed to create socket");
   }
 
-  // socket的連線
   struct sockaddr_in server_info;
 
   bzero(&server_info, sizeof(server_info));
@@ -45,10 +44,6 @@ int main(int argc, char** argv, char** envp) {
   bind(sockfd, (struct sockaddr*)&server_info, sizeof(server_info));
   listen(sockfd, 5);
 
-  // fd_set readfds, sockfds;
-  // FD_ZERO(readfds);
-  // FD_ZERO(sockfds);
-  // FD_SET(sockfd, &sockfds);
   np::shell::ShellConsole shell_console(sockfd, sockfd);
   shell_console.Run();
   return 0;
