@@ -6,6 +6,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -17,18 +18,22 @@ namespace shell {
 namespace builtin {
 using np::shell::Shell;
 
-const map<string, function<ExecError(const vector<string>& argv, Shell& shell)>>
-    kCommands{{"exit", exit}, {"printenv", printenv}, {"setenv", setenv},
-              {"name", name}, {"yell", yell},         {"tell", tell},
-              {"who", who}};
+const map<string, function<ExecError(const vector<string>&, Shell&)>>&
+FunctionsMap() {
+  static map<string, function<ExecError(const vector<string>&, Shell&)>>
+      kFunctions{{"exit", exit}, {"printenv", printenv}, {"setenv", setenv},
+                 {"name", name}, {"yell", yell},         {"tell", tell},
+                 {"who", who}};
+  return kFunctions;
+}
 
-ExecError Execute(const vector<string>& argv, Shell& shell) {
-  if (argv.empty()) {
+ExecError Execute(const vector<string>& argv_, Shell& shell) {
+  if (argv_.empty()) {
     return ExecError::kSuccess;
   }
 
-  auto resolve = kCommands.find(argv[0]);
-  if (resolve == kCommands.end()) {
+  auto resolve = FunctionsMap().find(argv_[0]);
+  if (resolve == FunctionsMap().end()) {
     return ExecError::kFileNotFound;
   } else {
     auto inherit_stdout = dup(STDOUT_FILENO);
@@ -36,7 +41,7 @@ ExecError Execute(const vector<string>& argv, Shell& shell) {
     dup2(shell.GetSockfd(), STDOUT_FILENO);
     dup2(shell.GetSockfd(), STDERR_FILENO);
 
-    auto status = resolve->second(argv, shell);
+    auto status = resolve->second(argv_, shell);
 
     dup2(inherit_stdout, STDOUT_FILENO);
     dup2(inherit_stderr, STDERR_FILENO);
@@ -46,15 +51,17 @@ ExecError Execute(const vector<string>& argv, Shell& shell) {
   }
 }
 
-#define _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(a, s) \
-  {                                             \
-    if (a.size() < s) {                         \
-      cerr << "Invalid arguments" << endl;      \
-      return ExecError::kSuccess;               \
-    }                                           \
+#define _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(rs) \
+  smatch argv;                                 \
+  {                                            \
+    static regex r(rs);                        \
+    if (!regex_search(argv_[1], argv, r)) {    \
+      cerr << "Invalid arguments" << endl;     \
+      return ExecError::kSuccess;              \
+    }                                          \
   }
 
-ExecError exit(const vector<string>& argv, Shell& shell) {
+ExecError exit(const vector<string>& argv_, Shell& shell) {
   for (int i = 0; i < kMaxDelayedPipes; i++) {
     for (auto& pid : shell.env.GetDelayedChildProcesses(i)) {
       ::kill(pid, SIGKILL);
@@ -64,21 +71,21 @@ ExecError exit(const vector<string>& argv, Shell& shell) {
   return ExecError::kSuccess;
 }
 
-ExecError printenv(const vector<string>& argv, Shell& shell) {
-  _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(argv, 2);
+ExecError printenv(const vector<string>& argv_, Shell& shell) {
+  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\S+)$)");
   cout << shell.env.GetVariable(argv[1]) << endl;
   return ExecError::kSuccess;
 }
 
-ExecError setenv(const vector<string>& argv, Shell& shell) {
-  _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(argv, 3);
+ExecError setenv(const vector<string>& argv_, Shell& shell) {
+  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\S+)\s+(.+)$)");
   shell.env.SetVariable(argv[1], argv[2]);
-  ::setenv(argv[1].c_str(), argv[2].c_str(), 1);
+  ::setenv(argv[1].str().c_str(), argv[2].str().c_str(), 1);
   return ExecError::kSuccess;
 }
 
-ExecError name(const vector<string>& argv, Shell& shell) {
-  _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(argv, 2);
+ExecError name(const vector<string>& argv_, Shell& shell) {
+  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
   const string& name = argv[1];
   if (shell.console_.user_names_.count(name) > 0 || name == "(no name)") {
     cout << "*** User '" << name << "' already exists. ***" << endl;
@@ -94,8 +101,8 @@ ExecError name(const vector<string>& argv, Shell& shell) {
   return ExecError::kSuccess;
 }
 
-ExecError yell(const vector<string>& argv, Shell& shell) {
-  _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(argv, 2);
+ExecError yell(const vector<string>& argv_, Shell& shell) {
+  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
   const string& message = argv[1];
   stringstream ss;
   ss << "*** " << shell.env.GetName() << " yelled ***: " << message << endl;
@@ -103,8 +110,8 @@ ExecError yell(const vector<string>& argv, Shell& shell) {
   return ExecError::kSuccess;
 }
 
-ExecError tell(const vector<string>& argv, Shell& shell) {
-  _NP_SHELL_BUILTIN_CHECK_ARGV_SIZE(argv, 3);
+ExecError tell(const vector<string>& argv_, Shell& shell) {
+  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\d+)\s+(.+)$)");
   const string& uid_s = argv[1];
   const string& message = argv[2];
   try {
@@ -123,7 +130,8 @@ ExecError tell(const vector<string>& argv, Shell& shell) {
   }
   return ExecError::kSuccess;
 }
-ExecError who(const vector<string>& argv, Shell& shell) {
+
+ExecError who(const vector<string>& argv_, Shell& shell) {
   cout << "<ID>\t<nickname>\t<IP/port>\t<indicate me>" << endl;
   for (weak_ptr<Shell>& user_w : shell.console_.GetUsers()) {
     auto user = user_w.lock();

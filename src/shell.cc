@@ -20,8 +20,8 @@ Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
   inet_ntop(AF_INET, &(client_info->sin_addr), this->addr_, INET_ADDRSTRLEN);
   sprintf(this->port_, "%d", client_info->sin_port);
   this->sockfd_ = sockfd;
-  builtin::setenv({"setenv", "PATH", "bin:."}, *this);
-  builtin::setenv({"setenv", "LANG", "en_US.UTF-8"}, *this);
+  builtin::setenv({"setenv", "PATH bin:."}, *this);
+  builtin::setenv({"setenv", "LANG en_US.UTF-8"}, *this);
 }
 
 ssize_t Shell::SendWelcomeMessage_() const {

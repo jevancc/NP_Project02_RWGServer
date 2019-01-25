@@ -10,28 +10,28 @@ using namespace std;
 
 namespace np {
 namespace shell {
-Command::Command(string command) {
+Command::Command(string input) {
   static regex pipe_regex(R"([^|!]+((\||!)\d+\s*$|\||$))");
   static regex argv_regex(R"((\||!|>|<)(\d+)+|(\|)|(>\s+)?(\S+))");
-  this->raw_ = utils::trim(command);
+  this->raw_ = utils::trim(input);
 
-  // for (auto& builtin: builtin::kCommands) {
-  //   if (utils::is_prefix(builtin.first, command)) {
-  //     Task task;
-  //     Task.argv_.push_back(builtin.first,
-  //     utils::trim(command.substr(builtin.first.size(), command.size())));
-  //     this->parsed_commands_.push_back(task);
-  //     return;
-  //   }
-  // }
+  for (auto& func : builtin::FunctionsMap()) {
+    if (utils::is_prefix(func.first, input)) {
+      Task task;
+      task.argv_.push_back(func.first);
+      task.argv_.push_back(move(input.substr(func.first.size(), input.size())));
+      this->parsed_commands_.push_back(move(task));
+      return;
+    }
+  }
 
   smatch sm;
   vector<string> commands;
-  while (regex_search(command, sm, pipe_regex)) {
+  while (regex_search(input, sm, pipe_regex)) {
     commands.push_back(sm[0]);
 
-    command = sm.suffix().str();
-    if (utils::trim(command).size() == 0) {
+    input = sm.suffix().str();
+    if (utils::trim(input).size() == 0) {
       break;
     }
   }

@@ -105,7 +105,7 @@ class Command {
   vector<Task> parsed_commands_;
 
  public:
-  Command(string command);
+  Command(string input);
   const vector<Task>& Parse() const { return this->parsed_commands_; }
 };
 

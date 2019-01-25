@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -std=c++11 -Wall -O2
+CFLAGS = -std=c++11 -Wall -O3
 INCLUDES = \
 	-Isrc/include \
 	-Ilib/optional-lite/include
