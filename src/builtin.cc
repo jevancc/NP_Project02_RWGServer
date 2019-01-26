@@ -1,13 +1,13 @@
+#include <fmt/core.h>
+#include <fmt/ostream.h>
 #include <np/shell/builtin.h>
 #include <np/shell/constants.h>
 #include <np/shell/types.h>
-#include <signal.h>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <regex>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -84,15 +84,14 @@ ExecError name(const vector<string>& argv_, Shell& shell) {
   _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
   const string& name = argv[1];
   if (shell.console_.user_names_.count(name) > 0 || name == "(no name)") {
-    cout << "*** User '" << name << "' already exists. ***" << endl;
+    fmt::print(cout, "*** User '{}' already exists. ***\n", name);
   } else {
-    stringstream ss;
     // NOTE: fix <ip>/<port> in login message for demo in class
-    ss << "*** User from CGILAB/511 is named '" << name << "'. ***" << endl;
+    shell.console_.Broadcast(fmt::format(
+        "*** User from {} is named '{}'. ***\n", "CGILAB/511", name));
     shell.console_.user_names_.erase(shell.env.GetName());
     shell.console_.user_names_.insert(name);
     shell.env.SetName(name);
-    shell.console_.Broadcast(ss.str());
   }
   return ExecError::kSuccess;
 }
@@ -100,9 +99,9 @@ ExecError name(const vector<string>& argv_, Shell& shell) {
 ExecError yell(const vector<string>& argv_, Shell& shell) {
   _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
   const string& message = argv[1];
-  stringstream ss;
-  ss << "*** " << shell.env.GetName() << " yelled ***: " << message << endl;
-  shell.console_.Broadcast(ss.str());
+
+  shell.console_.Broadcast(
+      fmt::format("*** {} yelled ***: {}\n", shell.env.GetName(), message));
   return ExecError::kSuccess;
 }
 
@@ -116,28 +115,24 @@ ExecError tell(const vector<string>& argv_, Shell& shell) {
     if (user_to == nullptr) {
       throw invalid_argument("user not exists");
     } else {
-      stringstream ss;
-      ss << "*** " << shell.env.GetName() << " told you ***: " << message
-         << endl;
-      user_to->Send(ss.str());
+      user_to->Send(fmt::format("*** {} told you ***: {}\n",
+                                shell.env.GetName(), message));
     }
   } catch (const invalid_argument& ia) {
-    cout << "*** Error: user #" << uid_s << " does not exist yet. ***" << endl;
+    fmt::print(cout, "*** Error: user #{} does not exist yet. ***\n", uid_s);
   }
   return ExecError::kSuccess;
 }
 
 ExecError who(const vector<string>& argv_, Shell& shell) {
-  cout << "<ID>\t<nickname>\t<IP/port>\t<indicate me>" << endl;
+  fmt::print(cout, "<ID>\t<nickname>\t<IP/port>\t<indicate me>\n");
   for (weak_ptr<Shell>& user_w : shell.console_.GetUsers_()) {
     auto user = user_w.lock();
     if (user) {
-      cout << user->env.GetUid() << "\t" << user->env.GetName() << "\t"
-           << "CGILAB/511";
-      if (user->env.GetUid() == shell.env.GetUid()) {
-        cout << "\t<-me";
-      }
-      cout << endl;
+      // NOTE: fix <ip>/<port> in login message for demo in class
+      fmt::print(cout, "{0}\t{1}\t{2}{3}\n", user->env.GetUid(),
+                 user->env.GetName(), "CGILAB/511",
+                 user->env.GetUid() == shell.env.GetUid() ? "\t<-me" : "");
     }
   }
   return ExecError::kSuccess;

@@ -2,24 +2,27 @@ CXX = g++
 CFLAGS = -std=c++11 -Wall -O2
 INCLUDES = \
 	-Isrc/include \
+	-Ilib/fmt/include \
 	-Ilib/spdlog/include \
 	-Ilib/optional-lite/include
 
 OUT = ./build
-EXE = $(OUT)/npshell_server
-SRCS = ./src
-LIBS = ./lib
-OBJS = $(OUT)/objs
-ALL := $(patsubst $(SRCS)/%.cc,$(OBJS)/%.o,$(wildcard $(SRCS)/*.cc))
+EXE = $(OUT)/npserver_single_proc
+SRC = ./src
+LIB = ./lib
+OBJ = $(OUT)/objs
+ALL := \
+	$(wildcard $(LIB)/fmt/src/*.cc) \
+	$(patsubst $(SRC)/%.cc,$(OBJ)/%.o,$(wildcard $(SRC)/*.cc))
 
 .PHONY: build
 
 all: build
-	@cp $(EXE) ./npshell_server
-	@chmod 775 ./npshell_server
+	@cp $(EXE) ./npserver_single_proc
+	@chmod 775 ./npserver_single_proc
 
-$(OBJS)/%.o: $(SRCS)/%.cc  $(shell find $(SRCS)/include -name "*.h")
-	@mkdir -p $(OBJS)
+$(OBJ)/%.o: $(SRC)/%.cc  $(shell find $(SRC)/include -name "*.h")
+	@mkdir -p $(OBJ)
 	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 build: $(ALL)

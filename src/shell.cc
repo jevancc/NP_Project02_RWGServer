@@ -1,4 +1,6 @@
+#define SPDLOG_FMT_EXTERNAL
 #include <arpa/inet.h>
+#include <fmt/core.h>
 #include <netinet/in.h>
 #include <np/shell/builtin.h>
 #include <np/shell/types.h>
@@ -76,25 +78,23 @@ void Shell::Execute(string input) {
   auto last_task = command.Tasks().rbegin();
   if (first_task->GetStdin().type == IO::kUserPipe) {
     int uid_from = first_task->GetStdin().i_data;
-    char msg[kMaxMessageSize] = {};
     this->env.SetDelayedPipe(0, Pipe::Create());
     if (!this->console_.IsUserExists(uid_from)) {
-      sprintf(msg, "*** Error: user #%d does not exist yet. ***\n", uid_from);
-      this->Send(msg);
+      this->Send(fmt::format("*** Error: user #{} does not exist yet. ***\n",
+                             uid_from));
       this->WaitDelayedChildProcesses_();
       return;
     } else if (auto p = this->env.GetUserPipe(uid_from).lock()) {
-      sprintf(msg, "*** %s (#%d) just received from %s (#%d) by '%s' ***\n",
-              this->env.GetName().c_str(), this->env.GetUid(),
-              this->console_.GetUserName(uid_from)->c_str(), uid_from,
-              input.c_str());
-      this->console_.Broadcast(msg);
+      this->console_.Broadcast(
+          fmt::format("*** {} (#{}) just received from {} (#{}) by '{}' ***\n",
+                      this->env.GetName(), this->env.GetUid(),
+                      *this->console_.GetUserName(uid_from), uid_from, input));
       first_task->SetInPipe(p);
       this->env.CloseUserPipe(uid_from);
     } else {
-      sprintf(msg, "*** Error: the pipe #%d->#%d does not exist yet. ***\n",
-              uid_from, this->env.GetUid());
-      this->Send(msg);
+      this->Send(
+          fmt::format("*** Error: the pipe #{}->#{} does not exist yet. ***\n",
+                      uid_from, this->env.GetUid()));
       this->WaitDelayedChildProcesses_();
       return;
     }
@@ -104,29 +104,28 @@ void Shell::Execute(string input) {
       last_task->GetStderr().type == IO::kUserPipe) {
     int uid_to = last_task->GetStdout().i_data;
     auto pipe_opt = this->GetPipe2User_(uid_to);
-    char msg[kMaxMessageSize] = {};
     if (!pipe_opt) {
-      sprintf(msg, "*** Error: user #%d does not exist yet. ***\n", uid_to);
-      this->Send(msg);
+      this->Send(
+          fmt::format("*** Error: user #{} does not exist yet. ***\n", uid_to));
       if (first_task->GetStdin().type == IO::kUserPipe) {
         this->WaitUserChildProcesses_(first_task->GetStdin().i_data);
       }
       this->WaitDelayedChildProcesses_();
       return;
     } else if (auto p = pipe_opt->lock()) {
-      sprintf(msg, "*** Error: the pipe #%d->#%d already exists. ***\n",
-              this->env.GetUid(), uid_to);
-      this->Send(msg);
+      this->Send(
+          fmt::format("*** Error: the pipe #{}->#{} already exists. ***\n",
+                      this->env.GetUid(), uid_to));
       if (first_task->GetStdin().type == IO::kUserPipe) {
         this->WaitUserChildProcesses_(first_task->GetStdin().i_data);
       }
       this->WaitDelayedChildProcesses_();
       return;
     } else {
-      sprintf(msg, "*** %s (#%d) just piped '%s' to %s (#%d) ***\n",
-              this->env.GetName().c_str(), this->env.GetUid(), input.c_str(),
-              this->console_.GetUserName(uid_to)->c_str(), uid_to);
-      this->console_.Broadcast(msg);
+      this->console_.Broadcast(
+          fmt::format("*** {} (#{}) just piped '{}' to {} (#{}) ***\n",
+                      this->env.GetName(), this->env.GetUid(), input,
+                      *this->console_.GetUserName(uid_to), uid_to));
       this->SetPipe2User_(uid_to, Pipe::Create());
     }
   }
@@ -139,7 +138,7 @@ void Shell::Execute(string input) {
     }
     switch (status) {
       case ExecError::kFileNotFound:
-        cout << "Unknown command: [" << task.GetFile() << "]." << endl;
+        fmt::print("Unknown command: [{}].\n", task.GetFile());
         break;
       case ExecError::kSuccess:
         break;

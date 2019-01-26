@@ -80,27 +80,7 @@ class IOOption {
     this->s_data = s;
   }
 
-  string ToString() const {
-    char s[32];
-    switch (this->type) {
-      case IO::kInherit:
-        sprintf(s, "Inherit");
-        break;
-      case IO::kDelayedPipe:
-        sprintf(s, "Delayed Pipe %d", this->i_data);
-        break;
-      case IO::kUserPipe:
-        sprintf(s, "User Pipe %d", this->i_data);
-        break;
-      case IO::kFile:
-        sprintf(s, "File \"%s\"", this->s_data.c_str());
-        break;
-      default:
-        sprintf(s, "Unknown type[%d]", this->type);
-        break;
-    }
-    return string(s);
-  }
+  string ToString() const;
 };
 
 class Command {

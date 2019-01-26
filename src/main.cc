@@ -2,18 +2,17 @@
 #include <netinet/in.h>
 #include <np/shell/types.h>
 #include <spdlog/spdlog.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <iostream>
-#include <memory>
 using namespace std;
 
 int main(int argc, char** argv, char** envp) {
+  cout.setf(ios::unitbuf);
+  cerr.setf(ios::unitbuf);
+
   signal(SIGCHLD, [](int signo) {
     int status;
     while (waitpid(-1, &status, WNOHANG) > 0)
@@ -23,6 +22,7 @@ int main(int argc, char** argv, char** envp) {
   if (argc < 2) {
     throw invalid_argument("no port specified");
   }
+
   int sockfd = 0;
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
 

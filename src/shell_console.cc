@@ -1,7 +1,10 @@
+#define SPDLOG_FMT_EXTERNAL
 #include <arpa/inet.h>
+#include <fmt/core.h>
 #include <netinet/in.h>
 #include <np/shell/shell.h>
 #include <np/shell/shell_console.h>
+#include <np/shell/types.h>
 #include <spdlog/spdlog.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +16,6 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
-#include <sstream>
 using namespace std;
 using nonstd::nullopt;
 using nonstd::optional;
@@ -64,9 +66,8 @@ void ShellConsole::ClearGarbageShells_() {
       spdlog::error(msg);
       throw runtime_error(msg);
     } else {
-      stringstream ss;
-      ss << "*** User '" << shell->env.GetName() << "' left. ***" << endl;
-      this->Broadcast(ss.str());
+      this->Broadcast(
+          fmt::format("*** User '{}' left. ***", shell->env.GetName()));
 
       for (auto u_w : this->GetUsers_()) {
         if (auto u = u_w.lock()) {

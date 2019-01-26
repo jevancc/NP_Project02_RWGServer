@@ -1,4 +1,6 @@
 #include <fcntl.h>
+#include <fmt/core.h>
+#include <fmt/ostream.h>
 #include <np/shell/builtin.h>
 #include <np/shell/shell.h>
 #include <np/shell/types.h>
@@ -20,6 +22,22 @@ using namespace std;
 
 namespace np {
 namespace shell {
+string IOOption::ToString() const {
+  switch (this->type) {
+    case IO::kInherit:
+      return fmt::format("Inherit");
+    case IO::kDelayedPipe:
+      return fmt::format("Delayed Pipe {}", this->i_data);
+      break;
+    case IO::kUserPipe:
+      return fmt::format("User Pipe {}", this->i_data);
+    case IO::kFile:
+      return fmt::format("File \"{}\"", this->s_data);
+    default:
+      return fmt::format("Unknown type[{}]", this->type);
+  }
+}
+
 string Task::ToString() const {
   string s = "Task {\n\t";
   for (auto& a : this->argv_) {
@@ -150,10 +168,7 @@ pid_t Task::Execute(Shell& shell) {
     const char* file = this->argv_[0].c_str();
     char** arg = this->C_Args();
     if (execvp(file, arg) < 0) {
-      char* msg = new char[this->argv_[0].size() + 32]();
-      sprintf(msg, "Unknown command: [%s].\n", this->argv_[0].c_str());
-      write(STDERR_FILENO, msg, strlen(msg));
-      delete msg;
+      fmt::print(cerr, "Unknown command: [{}].\n", this->argv_[0]);
       exit(0);
     }
     return ExecError::kSuccess;
