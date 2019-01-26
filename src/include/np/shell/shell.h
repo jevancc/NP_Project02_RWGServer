@@ -13,6 +13,7 @@ namespace shell {
 
 class Shell : enable_shared_from_this<Shell> {
  private:
+  bool is_alive_;
   int sockfd_;
   char addr_[INET_ADDRSTRLEN];
   char port_[8];
@@ -40,6 +41,8 @@ class Shell : enable_shared_from_this<Shell> {
   Shell(sockaddr_in* client_info, int sockfd, int uid, ShellConsole& console);
   Shell(const Shell&);
   Shell& operator=(const Shell&);
+
+  bool IsAlive() const { return this->is_alive_; }
 
   ssize_t Send(const string& s) const;
   void Execute(string input);

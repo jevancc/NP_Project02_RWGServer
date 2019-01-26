@@ -215,12 +215,17 @@ void ShellConsole::Run() {
           auto shell = this->fd2user_map_[fd];
           if (shell == nullptr) {
             throw runtime_error("shell with given sockfd no exists");
+          } else if (!shell->IsAlive()) {
+            continue;
           }
+
           memset(input_buffer, 0, sizeof(input_buffer));
           recv(fd, input_buffer, sizeof(input_buffer), 0);
 
           shell->Execute(string(input_buffer));
-          this->SendPrompt2Fd_(fd);
+          if (shell->IsAlive()) {
+            this->SendPrompt2Fd_(fd);
+          }
         }
       }
     }

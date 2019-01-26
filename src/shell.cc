@@ -20,7 +20,7 @@ namespace shell {
 
 Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
              ShellConsole& console)
-    : console_(console), env(uid) {
+    : is_alive_(true), console_(console), env(uid) {
   inet_ntop(AF_INET, &(client_info->sin_addr), this->addr_, INET_ADDRSTRLEN);
   sprintf(this->port_, "%d", client_info->sin_port);
   this->sockfd_ = sockfd;
