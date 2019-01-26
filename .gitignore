@@ -34,7 +34,7 @@ npshell
 npshell_server
 
 # Logs
-.log
+*.log
 
 # Node.js
 node_modules
