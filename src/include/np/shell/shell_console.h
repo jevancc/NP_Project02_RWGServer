@@ -59,6 +59,8 @@ class ShellConsole {
   ShellConsole(const ShellConsole&);
   ShellConsole& operator=(const ShellConsole&);
 
+  void CloseSockfd() { ::close(this->sockfd_); }
+
   optional<weak_ptr<Pipe>> GetPipe2User(Shell& user_from, int uid_to);
   bool SetPipe2User(Shell& user_from, int uid_to, shared_ptr<Pipe> p);
   bool MoveChildProcesses2User(Shell& user_from, int uid_to,

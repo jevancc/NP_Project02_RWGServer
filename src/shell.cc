@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <np/shell/builtin.h>
 #include <np/shell/types.h>
+#include <np/utils.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -23,7 +24,7 @@ Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
   inet_ntop(AF_INET, &(client_info->sin_addr), this->addr_, INET_ADDRSTRLEN);
   sprintf(this->port_, "%d", client_info->sin_port);
   this->sockfd_ = sockfd;
-  builtin::setenv({"setenv", "PATH bin:."}, *this);
+  builtin::setenv({"setenv", "PATH bin:.:/bin"}, *this);
   builtin::setenv({"setenv", "LANG en_US.UTF-8"}, *this);
 }
 
@@ -43,16 +44,19 @@ ssize_t Shell::Send(const string& s) const {
 
 int Shell::WaitDelayedChildProcesses_(int line) {
   int status;
-  for (auto pid : this->env.GetDelayedChildProcesses(line)) {
+  for (auto& pid : this->env.GetDelayedChildProcesses(line)) {
     waitpid(pid, &status, 0);
   }
+  this->env.GetDelayedChildProcesses(line).clear();
   return status;
 }
+
 int Shell::WaitUserChildProcesses_(int uid) {
   int status;
-  for (auto pid : this->env.GetUserChildProcesses(uid)) {
+  for (auto& pid : this->env.GetUserChildProcesses(uid)) {
     waitpid(pid, &status, 0);
   }
+  this->env.GetUserChildProcesses(uid).clear();
   return status;
 }
 
@@ -62,6 +66,7 @@ void Shell::Execute(string input) {
     ::setenv(vp.first.c_str(), vp.second.c_str(), 1);
   }
 
+  input = utils::trim(input);
   Command command(input);
   if (command.Tasks().empty()) {
     return;
@@ -69,14 +74,9 @@ void Shell::Execute(string input) {
 
   auto first_task = command.Tasks().begin();
   auto last_task = command.Tasks().rbegin();
-  int uid_from = first_task->GetStdin().i_data;
-  int uid_to = last_task->GetStdout().i_data;
-
   if (first_task->GetStdin().type == IO::kUserPipe) {
+    int uid_from = first_task->GetStdin().i_data;
     char msg[kMaxMessageSize] = {};
-    if (auto p = this->env.GetDelayedPipe(0).lock()) {
-      p->Close();
-    }
     this->env.SetDelayedPipe(0, Pipe::Create());
     if (!this->console_.IsUserExists(uid_from)) {
       sprintf(msg, "*** Error: user #%d does not exist yet. ***\n", uid_from);
@@ -102,19 +102,24 @@ void Shell::Execute(string input) {
 
   if (last_task->GetStdout().type == IO::kUserPipe ||
       last_task->GetStderr().type == IO::kUserPipe) {
+    int uid_to = last_task->GetStdout().i_data;
     auto pipe_opt = this->GetPipe2User_(uid_to);
     char msg[kMaxMessageSize] = {};
     if (!pipe_opt) {
       sprintf(msg, "*** Error: user #%d does not exist yet. ***\n", uid_to);
       this->Send(msg);
-      this->WaitUserChildProcesses_(uid_from);
+      if (first_task->GetStdin().type == IO::kUserPipe) {
+        this->WaitUserChildProcesses_(first_task->GetStdin().i_data);
+      }
       this->WaitDelayedChildProcesses_();
       return;
     } else if (auto p = pipe_opt->lock()) {
       sprintf(msg, "*** Error: the pipe #%d->#%d already exists. ***\n",
               this->env.GetUid(), uid_to);
       this->Send(msg);
-      this->WaitUserChildProcesses_(uid_from);
+      if (first_task->GetStdin().type == IO::kUserPipe) {
+        this->WaitUserChildProcesses_(first_task->GetStdin().i_data);
+      }
       this->WaitDelayedChildProcesses_();
       return;
     } else {
@@ -151,7 +156,9 @@ void Shell::Execute(string input) {
                                    this->env.GetDelayedChildProcesses());
   }
 
-  this->WaitUserChildProcesses_(first_task->GetStdout().i_data);
+  if (first_task->GetStdin().type == IO::kUserPipe) {
+    this->WaitUserChildProcesses_(first_task->GetStdin().i_data);
+  }
   this->WaitDelayedChildProcesses_();
   this->env.GotoNextLine();
 }

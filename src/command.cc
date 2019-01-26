@@ -10,10 +10,10 @@ using namespace std;
 
 namespace np {
 namespace shell {
-Command::Command(string input) : raw_(input) {
+Command::Command(string input) {
   static regex pipe_regex(R"([^|!]+((\||!)\d+\s*$|\||$))");
   static regex argv_regex(R"((\||!|>|<)(\d+)+|(\|)|(>\s+)?(\S+))");
-  utils::trim(input);
+  this->raw_ = utils::trim(input);
 
   for (auto& func : builtin::FunctionsMap()) {
     if (utils::is_prefix(func.first, input)) {

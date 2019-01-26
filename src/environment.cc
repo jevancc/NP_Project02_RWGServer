@@ -99,10 +99,8 @@ void Environment::Move2UserChildProcesses(int uid, vector<pid_t>& pids) {
 
 void Environment::GotoNextLine() {
   if (this->delayed_pipes_[this->current_line_]) {
-    this->delayed_pipes_[this->current_line_]->Close();
     this->delayed_pipes_[this->current_line_].reset();
   }
-  this->delayed_child_processes_[this->current_line_].clear();
   this->current_line_ = (this->current_line_ + 1) % kMaxDelayedPipes;
 }
 }  // namespace shell

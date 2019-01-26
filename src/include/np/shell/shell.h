@@ -44,7 +44,7 @@ class Shell : enable_shared_from_this<Shell> {
   ssize_t Send(const string& s) const;
   void Execute(string input);
   int GetSockfd() const { return this->sockfd_; }
-  void CloseSockfd() { close(this->sockfd_); }
+  void CloseSockfd() { ::close(this->sockfd_); }
 
   ~Shell();
 };

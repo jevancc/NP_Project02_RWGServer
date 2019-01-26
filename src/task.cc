@@ -139,9 +139,8 @@ pid_t Task::Execute(Shell& shell) {
         break;
     }
 
-    if (this->in_pipe_) {
-      this->in_pipe_->Close();
-    }
+    Pipe::CloseAllPipes_();
+    shell.console_.CloseSockfd();
     for (auto& user_w : shell.console_.GetUsers_()) {
       if (auto user = user_w.lock()) {
         user->CloseSockfd();

@@ -18,6 +18,7 @@ class ShellConsole;
 #include <map>
 #include <memory>
 #include <nonstd/optional.hpp>
+#include <set>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -31,8 +32,11 @@ namespace shell {
 class Pipe {
  private:
   int fd_[2];
+  static vector<weak_ptr<Pipe>> PipePool_;
+  static void CloseAllPipes_();
 
  public:
+  friend class Task;
   static shared_ptr<Pipe> Create();
   Pipe();
   ~Pipe();
