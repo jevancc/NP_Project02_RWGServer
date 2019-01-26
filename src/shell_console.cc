@@ -66,6 +66,16 @@ void ShellConsole::ClearGarbageShells_() {
       stringstream ss;
       ss << "*** User '" << shell->env.GetUid() << "' left. ***" << endl;
       this->Broadcast(ss.str());
+
+      for (auto u_w : this->GetUsers_()) {
+        if (auto u = u_w.lock()) {
+          for (auto& pid : u->env.GetUserChildProcesses(shell->env.GetUid())) {
+            ::kill(pid, SIGKILL);
+          }
+          u->env.GetUserChildProcesses(shell->env.GetUid()).clear();
+          u->env.GetUserPipe(shell->env.GetUid()).reset();
+        }
+      }
       this->id2user_map_[shell->env.GetUid()].reset();
       this->fd2user_map_[shell->sockfd_].reset();
       FD_CLR(shell->sockfd_, &this->sockfds_);
