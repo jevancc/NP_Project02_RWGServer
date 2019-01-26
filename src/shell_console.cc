@@ -221,11 +221,14 @@ void ShellConsole::Run() {
           }
 
           memset(input_buffer, 0, sizeof(input_buffer));
-          recv(fd, input_buffer, sizeof(input_buffer), 0);
-
-          shell->Execute(string(input_buffer));
-          if (shell->IsAlive()) {
-            this->SendPrompt2Fd_(fd);
+          int len = recv(fd, input_buffer, sizeof(input_buffer), 0);
+          if (len <= 0) {
+            builtin::exit({"exit"}, *shell);
+          } else {
+            shell->Execute(string(input_buffer));
+            if (shell->IsAlive()) {
+              this->SendPrompt2Fd_(fd);
+            }
           }
         }
       }
