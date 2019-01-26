@@ -22,7 +22,7 @@ namespace np {
 namespace shell {
 
 ShellConsole::ShellConsole(int sockfd, int maxfd)
-    : sockfd_(sockfd), maxfd_(maxfd) {
+    : sockfd_(sockfd), maxfd_(maxfd), id2user_map_({nullptr}) {
   FD_ZERO(&this->sockfds_);
   FD_SET(sockfd, &this->sockfds_);
 }
