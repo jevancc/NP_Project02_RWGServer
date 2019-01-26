@@ -1,9 +1,9 @@
 #include <arpa/inet.h>
-#include <easylogging++.h>
 #include <netinet/in.h>
 #include <np/shell/builtin.h>
 #include <np/shell/types.h>
 #include <np/utils.h>
+#include <spdlog/spdlog.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -175,7 +175,7 @@ Shell::~Shell() {
     }
   }
   ::close(this->sockfd_);
-  LOG(INFO) << "User " << this->env.GetUid() << " disconnected";
+  spdlog::info("User {} disconnected", this->env.GetUid());
 }
 
 }  // namespace shell

@@ -1,7 +1,7 @@
 #include <arpa/inet.h>
-#include <easylogging++.h>
 #include <netinet/in.h>
 #include <np/shell/types.h>
+#include <spdlog/spdlog.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,8 +12,6 @@
 #include <iostream>
 #include <memory>
 using namespace std;
-
-INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char** argv, char** envp) {
   signal(SIGCHLD, [](int signo) {
@@ -47,7 +45,7 @@ int main(int argc, char** argv, char** envp) {
   bind(sockfd, (struct sockaddr*)&server_info, sizeof(server_info));
   listen(sockfd, 5);
 
-  LOG(INFO) << "Server is listening on port " << argv[1];
+  spdlog::info("Server is listening on port {}", argv[1]);
 
   np::shell::ShellConsole shell_console(sockfd, sockfd);
   shell_console.Run();

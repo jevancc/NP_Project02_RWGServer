@@ -1,8 +1,8 @@
 #include <arpa/inet.h>
-#include <easylogging++.h>
 #include <netinet/in.h>
 #include <np/shell/shell.h>
 #include <np/shell/shell_console.h>
+#include <spdlog/spdlog.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,6 +13,7 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <sstream>
 using namespace std;
 using nonstd::nullopt;
 using nonstd::optional;
@@ -45,7 +46,7 @@ shared_ptr<Shell> ShellConsole::CreateShell_(sockaddr_in* client_info,
   if (this->id2user_map_[uid] != nullptr ||
       this->fd2user_map_[ufd] != nullptr) {
     static auto msg = "failed to create user: uid or ufd is occupied";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw runtime_error(msg);
   }
   this->id2user_map_[uid] = shell_ptr;
@@ -60,7 +61,7 @@ void ShellConsole::ClearGarbageShells_() {
     if (shell.use_count() > 3) {
       static auto msg =
           "failed to delete user: shell's shared_ptr is owned by others";
-      LOG(ERROR) << msg;
+      spdlog::error(msg);
       throw runtime_error(msg);
     } else {
       stringstream ss;
@@ -92,7 +93,7 @@ ssize_t ShellConsole::Send2Uid(int uid, const string& msg) const {
   shared_ptr<Shell> shell;
   if ((shell = this->id2user_map_[uid]) == nullptr) {
     static auto msg = "failed to send message: invalid uid";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw runtime_error(msg);
   }
   return send(shell->sockfd_, msg.c_str(), msg.size(), 0);
@@ -139,14 +140,14 @@ void ShellConsole::DeleteUser(int uid, int ufd) {
       this->garbage_shell_queue_.push(shell);
     } else {
       static auto msg = "failed to add user to garbage queue: user not exists";
-      LOG(ERROR) << msg;
+      spdlog::error(msg);
       throw invalid_argument(msg);
     }
   } else {
     static auto msg =
         "failed to add user to garbage queue: uid and ufd not correspond to "
         "same user";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw invalid_argument(msg);
   }
 }
@@ -208,8 +209,8 @@ void ShellConsole::Run() {
               // NOTE: fix <ip>/<port> in login message for demo in class
               "*** User '(no name)' entered from CGILAB/511. ***\n");
           this->SendPrompt2Fd_(ufd);
-          LOG(INFO) << "User connected from " << shell->addr_ << ":"
-                    << shell->port_ << " with uid:" << shell->env.GetUid();
+          spdlog::info("User connected from {}:{} with uid:{}", shell->addr_,
+                       shell->port_, shell->env.GetUid());
         } else {
           auto shell = this->fd2user_map_[fd];
           if (shell == nullptr) {
@@ -218,8 +219,6 @@ void ShellConsole::Run() {
           memset(input_buffer, 0, sizeof(input_buffer));
           recv(fd, input_buffer, sizeof(input_buffer), 0);
 
-          // LOG(DEBUG) << "Input received from user " << shell->env.GetUid() <<
-          // ": " << input_buffer;
           shell->Execute(string(input_buffer));
           this->SendPrompt2Fd_(fd);
         }

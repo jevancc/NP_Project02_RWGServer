@@ -1,5 +1,5 @@
-#include <easylogging++.h>
 #include <np/shell/types.h>
+#include <spdlog/spdlog.h>
 #include <string.h>
 #include <unistd.h>
 #include <memory>
@@ -33,7 +33,7 @@ shared_ptr<Pipe> Pipe::Create() {
   auto p = make_shared<Pipe>();
   if (pipe(p->fd_) < 0) {
     auto static msg = "failed to create pipe";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw runtime_error(msg);
   } else {
     Pipe::PipePool_.push_back(p);
@@ -55,7 +55,7 @@ void Pipe::DupIn2(int fd) {
     dup2(*this->In(), fd);
   } else {
     static const char* msg = "failed to dup pipe fd: pipe is closed";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw runtime_error(msg);
   }
 }
@@ -65,7 +65,7 @@ void Pipe::DupOut2(int fd) {
     dup2(*this->Out(), fd);
   } else {
     static const char* msg = "failed to dup pipe fd: pipe is closed";
-    LOG(ERROR) << msg;
+    spdlog::error(msg);
     throw runtime_error(msg);
   }
 }
