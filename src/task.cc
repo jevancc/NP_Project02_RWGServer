@@ -152,7 +152,7 @@ pid_t Task::Execute(Shell& shell) {
     if (execvp(file, arg) < 0) {
       char* msg = new char[this->argv_[0].size() + 32]();
       sprintf(msg, "Unknown command: [%s].\n", this->argv_[0].c_str());
-      cerr << msg;
+      write(STDERR_FILENO, msg, strlen(msg));
       delete msg;
       exit(0);
     }
