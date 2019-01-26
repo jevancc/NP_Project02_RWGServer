@@ -135,7 +135,7 @@ ExecError who(const vector<string>& argv_, Shell& shell) {
       cout << user->env.GetUid() << "\t" << user->env.GetName() << "\t"
            << "CGILAB/511";
       if (user->env.GetUid() == shell.env.GetUid()) {
-        cout << "\t<- me";
+        cout << "\t<-me";
       }
       cout << endl;
     }
