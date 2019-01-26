@@ -1,6 +1,7 @@
 #include <np/shell/constants.h>
 #include <np/shell/types.h>
 #include <sys/stat.h>
+#include <memory>
 #include <nonstd/optional.hpp>
 #include <string>
 #include <vector>
@@ -9,13 +10,18 @@ using namespace std;
 namespace np {
 namespace shell {
 
-shared_ptr<Pipe> Environment::GetDelayedPipe(int line) {
-  return this->delayed_pipes_[(line + current_line_) % kMaxDelayedPipes];
+weak_ptr<Pipe> Environment::GetDelayedPipe(int line) {
+  int line_idx = (line + current_line_) % kMaxDelayedPipes;
+  if (!this->delayed_pipes_[line_idx] ||
+      !this->delayed_pipes_[line_idx]->IsEnable()) {
+    this->delayed_pipes_[line_idx].reset();
+  }
+  return this->delayed_pipes_[line_idx];
 }
 void Environment::SetDelayedPipe(int line, shared_ptr<Pipe> pipe) {
   this->delayed_pipes_[(line + current_line_) % kMaxDelayedPipes] = pipe;
 }
-void Environment::CreateDelayedPipe(int line) {
+void Environment::EnsureDelayedPipe(int line) {
   int line_idx = (line + current_line_) % kMaxDelayedPipes;
   if (!this->delayed_pipes_[line_idx] ||
       !this->delayed_pipes_[line_idx]->IsEnable()) {
@@ -24,39 +30,27 @@ void Environment::CreateDelayedPipe(int line) {
 }
 void Environment::CloseDelayedPipe(int line) {
   int line_idx = (line + current_line_) % kMaxDelayedPipes;
-  if (this->delayed_pipes_[line_idx]) {
-    this->delayed_pipes_[line_idx]->Close();
-  }
+  this->delayed_pipes_[line_idx].reset();
 }
 void Environment::CloseAllDelayedPipes() {
   for (int i = 0; i < kMaxDelayedPipes; i++) {
-    if (this->delayed_pipes_[i]) {
-      this->delayed_pipes_[i]->Close();
-    }
+    this->delayed_pipes_[i].reset();
   }
 }
 
-shared_ptr<Pipe> Environment::GetUserPipe(int uid) {
+weak_ptr<Pipe> Environment::GetUserPipe(int uid) {
+  if (!this->user_pipes_[uid] || !this->user_pipes_[uid]->IsEnable()) {
+    this->user_pipes_[uid].reset();
+  }
   return this->user_pipes_[uid];
 }
 void Environment::SetUserPipe(int uid, shared_ptr<Pipe> pipe) {
-  this->user_pipes_[uid] = pipe;
+  this->user_pipes_[uid].swap(pipe);
 }
-void Environment::CreateUserPipe(int uid) {
-  if (!this->user_pipes_[uid] || !this->user_pipes_[uid]->IsEnable()) {
-    this->user_pipes_[uid] = Pipe::Create();
-  }
-}
-void Environment::CloseUserPipe(int uid) {
-  if (this->user_pipes_[uid]) {
-    this->user_pipes_[uid]->Close();
-  }
-}
+void Environment::CloseUserPipe(int uid) { this->user_pipes_[uid].reset(); }
 void Environment::CloseAllUserPipes() {
   for (int i = 0; i < kMaxShellUsers; i++) {
-    if (this->user_pipes_[i]) {
-      this->user_pipes_[i]->Close();
-    }
+    this->user_pipes_[i].reset();
   }
 }
 
@@ -84,7 +78,7 @@ void Environment::AddDelayedChildProcess(int line, pid_t pid) {
   int line_idx = (line + current_line_) % kMaxDelayedPipes;
   this->delayed_child_processes_[line_idx].push_back(pid);
 }
-void Environment::AddDelayedChildProcesses(int line, vector<pid_t>& pids) {
+void Environment::Move2DelayedChildProcesses(int line, vector<pid_t>& pids) {
   int line_idx = (line + current_line_) % kMaxDelayedPipes;
   this->delayed_child_processes_[line_idx].insert(
       this->delayed_child_processes_[line_idx].end(), pids.begin(), pids.end());
@@ -97,7 +91,7 @@ vector<pid_t>& Environment::GetUserChildProcesses(int uid) {
 void Environment::AddUserChildProcess(int uid, pid_t pid) {
   this->user_child_processes_[uid].push_back(pid);
 }
-void Environment::AddUserChildProcesses(int uid, vector<pid_t>& pids) {
+void Environment::Move2UserChildProcesses(int uid, vector<pid_t>& pids) {
   this->user_child_processes_[uid].insert(
       this->user_child_processes_[uid].end(), pids.begin(), pids.end());
   pids.clear();
@@ -106,6 +100,7 @@ void Environment::AddUserChildProcesses(int uid, vector<pid_t>& pids) {
 void Environment::GotoNextLine() {
   if (this->delayed_pipes_[this->current_line_]) {
     this->delayed_pipes_[this->current_line_]->Close();
+    this->delayed_pipes_[this->current_line_].reset();
   }
   this->delayed_child_processes_[this->current_line_].clear();
   this->current_line_ = (this->current_line_ + 1) % kMaxDelayedPipes;

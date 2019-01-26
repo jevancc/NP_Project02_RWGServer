@@ -111,7 +111,7 @@ ExecError tell(const vector<string>& argv_, Shell& shell) {
   const string& message = argv[2];
   try {
     int uid = stoi(uid_s);
-    auto user_to = shell.console_.GetUserByUid(uid).lock();
+    auto user_to = shell.console_.GetUserByUid_(uid).lock();
     if (user_to == nullptr) {
       throw invalid_argument("user not exists");
     } else {
@@ -128,7 +128,7 @@ ExecError tell(const vector<string>& argv_, Shell& shell) {
 
 ExecError who(const vector<string>& argv_, Shell& shell) {
   cout << "<ID>\t<nickname>\t<IP/port>\t<indicate me>" << endl;
-  for (weak_ptr<Shell>& user_w : shell.console_.GetUsers()) {
+  for (weak_ptr<Shell>& user_w : shell.console_.GetUsers_()) {
     auto user = user_w.lock();
     if (user) {
       cout << user->env.GetUid() << "\t" << user->env.GetName() << "\t"

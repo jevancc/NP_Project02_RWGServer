@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <iostream>
 #include <nonstd/optional.hpp>
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -52,14 +53,15 @@ pid_t Task::Execute(Shell& shell) {
   }
 
   if (!this->in_pipe_) {
-    this->in_pipe_ = shell.env.GetDelayedPipe(0);
+    this->in_pipe_ = shell.env.GetDelayedPipe(0).lock();
     shell.env.SetDelayedPipe(0, Pipe::Create());
   }
+
   if (this->stdout_.type == IO::kDelayedPipe) {
-    shell.env.CreateDelayedPipe(this->stdout_.i_data);
+    shell.env.EnsureDelayedPipe(this->stdout_.i_data);
   }
   if (this->stderr_.type == IO::kDelayedPipe) {
-    shell.env.CreateDelayedPipe(this->stderr_.i_data);
+    shell.env.EnsureDelayedPipe(this->stderr_.i_data);
   }
 
   pid_t pid = fork();
@@ -78,8 +80,11 @@ pid_t Task::Execute(Shell& shell) {
     dup2(shell.GetSockfd(), STDOUT_FILENO);
     dup2(shell.GetSockfd(), STDERR_FILENO);
 
+    weak_ptr<Pipe> pipe_w;
+
     // child process
     switch (this->stdin_.type) {
+      case IO::kUserPipe:  // NOTE:this->in_pipe_ is ensured in shell::Execute()
       case IO::kInherit:
         if (this->in_pipe_ && this->in_pipe_->IsEnable()) {
           this->in_pipe_->DupIn2(STDIN_FILENO);
@@ -97,7 +102,16 @@ pid_t Task::Execute(Shell& shell) {
       case IO::kInherit:
         break;
       case IO::kDelayedPipe:
-        shell.env.GetDelayedPipe(this->stdout_.i_data)->DupOut2(STDOUT_FILENO);
+        pipe_w = shell.env.GetDelayedPipe(this->stdout_.i_data);
+        if (auto p = pipe_w.lock()) {
+          p->DupOut2(STDOUT_FILENO);
+        }
+        break;
+      case IO::kUserPipe:
+        pipe_w = *shell.GetPipe2User_(this->stdout_.i_data);
+        if (auto p = pipe_w.lock()) {
+          p->DupOut2(STDOUT_FILENO);
+        }
         break;
       case IO::kFile:
         int fd = open(this->stdout_.s_data.c_str(),
@@ -110,7 +124,16 @@ pid_t Task::Execute(Shell& shell) {
       case IO::kInherit:
         break;
       case IO::kDelayedPipe:
-        shell.env.GetDelayedPipe(this->stderr_.i_data)->DupOut2(STDERR_FILENO);
+        pipe_w = shell.env.GetDelayedPipe(this->stderr_.i_data);
+        if (auto p = pipe_w.lock()) {
+          p->DupOut2(STDERR_FILENO);
+        }
+        break;
+      case IO::kUserPipe:
+        pipe_w = *shell.GetPipe2User_(this->stderr_.i_data);
+        if (auto p = pipe_w.lock()) {
+          p->DupOut2(STDERR_FILENO);
+        }
         break;
       case IO::kFile:  // NOTE: Not in spec
         break;
@@ -119,8 +142,7 @@ pid_t Task::Execute(Shell& shell) {
     if (this->in_pipe_) {
       this->in_pipe_->Close();
     }
-    shell.env.CloseAllDelayedPipes();
-    for (auto& user_w : shell.console_.GetUsers()) {
+    for (auto& user_w : shell.console_.GetUsers_()) {
       if (auto user = user_w.lock()) {
         user->CloseSockfd();
       }

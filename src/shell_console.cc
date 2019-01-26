@@ -14,6 +14,8 @@
 #include <iostream>
 #include <memory>
 using namespace std;
+using nonstd::nullopt;
+using nonstd::optional;
 
 namespace np {
 namespace shell {
@@ -112,6 +114,14 @@ ssize_t ShellConsole::SendPrompt2Fd_(int fd) const {
   return this->Send2Fd(fd, prompt);
 }
 
+optional<string> ShellConsole::GetUserName(int uid) const {
+  if (this->IsUserExists(uid)) {
+    return string(this->id2user_map_[uid]->env.GetName());
+  } else {
+    return nullopt;
+  }
+}
+
 void ShellConsole::DeleteUser(int uid, int ufd) {
   if (this->id2user_map_[uid] == this->fd2user_map_[ufd]) {
     auto shell = this->id2user_map_[uid];
@@ -128,6 +138,34 @@ void ShellConsole::DeleteUser(int uid, int ufd) {
         "same user";
     LOG(ERROR) << msg;
     throw invalid_argument(msg);
+  }
+}
+
+optional<weak_ptr<Pipe>> ShellConsole::GetPipe2User(Shell& user_from,
+                                                    int uid_to) {
+  if (this->IsUserExists(uid_to)) {
+    return this->id2user_map_[uid_to]->env.GetUserPipe(user_from.env.GetUid());
+  } else {
+    return nullopt;
+  }
+}
+bool ShellConsole::SetPipe2User(Shell& user_from, int uid_to,
+                                shared_ptr<Pipe> p) {
+  if (this->IsUserExists(uid_to)) {
+    this->id2user_map_[uid_to]->env.SetUserPipe(user_from.env.GetUid(), p);
+    return true;
+  } else {
+    return false;
+  }
+}
+bool ShellConsole::MoveChildProcesses2User(Shell& user_from, int uid_to,
+                                           vector<pid_t>& pids) {
+  if (this->IsUserExists(uid_to)) {
+    this->id2user_map_[uid_to]->env.Move2UserChildProcesses(
+        user_from.env.GetUid(), pids);
+    return true;
+  } else {
+    return false;
   }
 }
 

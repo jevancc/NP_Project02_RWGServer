@@ -18,6 +18,13 @@ class Shell : enable_shared_from_this<Shell> {
   char port_[8];
   ShellConsole& console_;
 
+  optional<weak_ptr<Pipe>> GetPipe2User_(int uid);
+  bool SetPipe2User_(int uid, shared_ptr<Pipe> p);
+  bool MoveChildProcesses2User_(int uid, vector<pid_t>& pids);
+
+  int WaitDelayedChildProcesses_(int line = 0);
+  int WaitUserChildProcesses_(int uid);
+
  public:
   friend class Task;
   friend class ShellConsole;
@@ -33,6 +40,7 @@ class Shell : enable_shared_from_this<Shell> {
   Shell(sockaddr_in* client_info, int sockfd, int uid, ShellConsole& console);
   Shell(const Shell&);
   Shell& operator=(const Shell&);
+
   ssize_t Send(const string& s) const;
   void Execute(string input);
   int GetSockfd() const { return this->sockfd_; }

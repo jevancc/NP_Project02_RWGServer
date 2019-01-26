@@ -106,11 +106,12 @@ class Command {
 
  public:
   Command(string input);
-  const vector<Task>& Parse() const { return this->parsed_commands_; }
+  vector<Task>& Tasks() { return this->parsed_commands_; }
 };
 
 class Task {
  private:
+  string original_input_;
   vector<string> argv_;
   shared_ptr<Pipe> in_pipe_;
   IOOption stdin_;
@@ -118,13 +119,14 @@ class Task {
   IOOption stderr_;
 
  public:
-  Task(){};
+  Task(const string& input) : original_input_(input){};
   friend class Command;
   string ToString() const;
   const string& GetFile() const { return this->argv_[0]; }
   const IOOption& GetStdin() const { return this->stdin_; }
   const IOOption& GetStdout() const { return this->stdout_; }
   const IOOption& GetStderr() const { return this->stderr_; }
+  void SetInPipe(shared_ptr<Pipe> p) { this->in_pipe_.swap(p); }
   pid_t Execute(Shell& shell);
   char** C_Args() const;
 };
@@ -147,15 +149,14 @@ class Environment {
   void SetName(const string& s) { this->name_ = s; }
   const string& GetName() const { return this->name_; }
 
-  shared_ptr<Pipe> GetDelayedPipe(int line = 0);
+  weak_ptr<Pipe> GetDelayedPipe(int line = 0);
   void SetDelayedPipe(int line, shared_ptr<Pipe> pipe);
-  void CreateDelayedPipe(int line);
+  void EnsureDelayedPipe(int line);
   void CloseDelayedPipe(int line);
   void CloseAllDelayedPipes();
 
-  shared_ptr<Pipe> GetUserPipe(int uid = 0);
+  weak_ptr<Pipe> GetUserPipe(int uid);
   void SetUserPipe(int uid, shared_ptr<Pipe> pipe);
-  void CreateUserPipe(int uid);
   void CloseUserPipe(int uid);
   void CloseAllUserPipes();
 
@@ -165,11 +166,11 @@ class Environment {
 
   vector<pid_t>& GetDelayedChildProcesses(int line = 0);
   void AddDelayedChildProcess(int line, pid_t pid);
-  void AddDelayedChildProcesses(int line, vector<pid_t>& pids);
+  void Move2DelayedChildProcesses(int line, vector<pid_t>& pids);
 
-  vector<pid_t>& GetUserChildProcesses(int uid = 0);
+  vector<pid_t>& GetUserChildProcesses(int uid);
   void AddUserChildProcess(int uid, pid_t pid);
-  void AddUserChildProcesses(int uid, vector<pid_t>& pids);
+  void Move2UserChildProcesses(int uid, vector<pid_t>& pids);
 
   void GotoNextLine();
 };

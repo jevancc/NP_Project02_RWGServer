@@ -5,6 +5,7 @@
 
 const int kMaxDelayedPipes = 2048;
 const int kMaxShellUsers = 1024;
+const int kMaxMessageSize = 2048;
 
 enum IO {
   kInherit = 0,

@@ -10,14 +10,14 @@ using namespace std;
 
 namespace np {
 namespace shell {
-Command::Command(string input) {
+Command::Command(string input) : raw_(input) {
   static regex pipe_regex(R"([^|!]+((\||!)\d+\s*$|\||$))");
   static regex argv_regex(R"((\||!|>|<)(\d+)+|(\|)|(>\s+)?(\S+))");
-  this->raw_ = utils::trim(input);
+  utils::trim(input);
 
   for (auto& func : builtin::FunctionsMap()) {
     if (utils::is_prefix(func.first, input)) {
-      Task task;
+      Task task(this->raw_);
       task.argv_.push_back(func.first);
       task.argv_.push_back(move(input.substr(func.first.size(), input.size())));
       this->parsed_commands_.push_back(move(task));
@@ -37,7 +37,7 @@ Command::Command(string input) {
   }
 
   for (auto s : commands) {
-    Task task;
+    Task task(this->raw_);
 
     utils::trim(s);
     while (regex_search(s, sm, argv_regex)) {
