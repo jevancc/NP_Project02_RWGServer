@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <easylogging++.h>
 #include <netinet/in.h>
 #include <np/shell/builtin.h>
 #include <np/shell/types.h>
@@ -22,19 +23,6 @@ Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
   this->sockfd_ = sockfd;
   builtin::setenv({"setenv", "PATH bin:."}, *this);
   builtin::setenv({"setenv", "LANG en_US.UTF-8"}, *this);
-}
-
-ssize_t Shell::SendWelcomeMessage_() const {
-  static const string welcome_message(
-      "****************************************\n"
-      "** Welcome to the information server. **\n"
-      "****************************************\n");
-  return this->Send(welcome_message);
-}
-
-ssize_t Shell::SendPrompt_() const {
-  static const string prompt("% ");
-  return this->Send(prompt);
 }
 
 ssize_t Shell::Send(const string& s) const {
@@ -86,5 +74,21 @@ void Shell::Execute(string input) {
 
   this->env.GotoNextLine();
 }
+
+Shell::~Shell() {
+  for (int i = 0; i < kMaxDelayedPipes; i++) {
+    for (auto& pid : this->env.GetDelayedChildProcesses(i)) {
+      ::kill(pid, SIGKILL);
+    }
+  }
+  for (int i = 0; i < kMaxShellUsers; i++) {
+    for (auto& pid : this->env.GetUserChildProcesses(i)) {
+      ::kill(pid, SIGKILL);
+    }
+  }
+  ::close(this->sockfd_);
+  LOG(INFO) << "User " << this->env.GetUid() << " disconnected";
+}
+
 }  // namespace shell
 }  // namespace np

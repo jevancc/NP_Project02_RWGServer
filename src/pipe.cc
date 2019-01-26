@@ -1,3 +1,4 @@
+#include <easylogging++.h>
 #include <np/shell/types.h>
 #include <string.h>
 #include <unistd.h>
@@ -20,7 +21,9 @@ Pipe::~Pipe() { this->Close(); }
 shared_ptr<Pipe> Pipe::Create() {
   auto p = make_shared<Pipe>();
   if (pipe(p->fd_) < 0) {
-    throw runtime_error("failed to create pipe");
+    auto static msg = "failed to create pipe";
+    LOG(ERROR) << msg;
+    throw runtime_error(msg);
   } else {
     return p;
   }

@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <easylogging++.h>
 #include <netinet/in.h>
 #include <np/shell/shell.h>
 #include <np/shell/shell_console.h>
@@ -41,17 +42,46 @@ shared_ptr<Shell> ShellConsole::CreateShell_(sockaddr_in* client_info,
   shared_ptr<Shell> shell_ptr(new Shell(client_info, ufd, uid, *this));
   if (this->id2user_map_[uid] != nullptr ||
       this->fd2user_map_[ufd] != nullptr) {
-    throw runtime_error("failed to create new user: uid or ufd is occupied");
+    static auto msg = "failed to create user: uid or ufd is occupied";
+    LOG(ERROR) << msg;
+    throw runtime_error(msg);
   }
   this->id2user_map_[uid] = shell_ptr;
   this->fd2user_map_[ufd] = shell_ptr;
   return shell_ptr;
 }
 
+void ShellConsole::ClearGarbageShells_() {
+  while (!this->garbage_shell_queue_.empty()) {
+    auto shell = this->garbage_shell_queue_.front();
+    this->garbage_shell_queue_.pop();
+    if (shell.use_count() > 3) {
+      static auto msg =
+          "failed to delete user: shell's shared_ptr is owned by others";
+      LOG(ERROR) << msg;
+      throw runtime_error(msg);
+    } else {
+      stringstream ss;
+      ss << "*** User '" << shell->env.GetUid() << "' left. ***" << endl;
+      this->Broadcast(ss.str());
+      this->id2user_map_[shell->env.GetUid()].reset();
+      this->fd2user_map_[shell->sockfd_].reset();
+      FD_CLR(shell->sockfd_, &this->sockfds_);
+      this->user_names_.erase(shell->env.GetName());
+      this->available_uids_.push(shell->env.GetUid());
+      if (this->maxfd_ == shell->sockfd_) {
+        this->maxfd_--;
+      }
+    }
+  }
+}
+
 ssize_t ShellConsole::Send2Uid(int uid, const string& msg) const {
   shared_ptr<Shell> shell;
   if ((shell = this->id2user_map_[uid]) == nullptr) {
-    throw runtime_error("failed to send message: invalid uid");
+    static auto msg = "failed to send message: invalid uid";
+    LOG(ERROR) << msg;
+    throw runtime_error(msg);
   }
   return send(shell->sockfd_, msg.c_str(), msg.size(), 0);
 }
@@ -69,13 +99,46 @@ ssize_t ShellConsole::Broadcast(const string& msg) const {
   return ret;
 }
 
+ssize_t ShellConsole::SendWelcomeMessage2Fd_(int fd) const {
+  static const string welcome_message(
+      "****************************************\n"
+      "** Welcome to the information server. **\n"
+      "****************************************\n");
+  return this->Send2Fd(fd, welcome_message);
+}
+
+ssize_t ShellConsole::SendPrompt2Fd_(int fd) const {
+  static const string prompt("% ");
+  return this->Send2Fd(fd, prompt);
+}
+
+void ShellConsole::DeleteUser(int uid, int ufd) {
+  if (this->id2user_map_[uid] == this->fd2user_map_[ufd]) {
+    auto shell = this->id2user_map_[uid];
+    if (shell != nullptr) {
+      this->garbage_shell_queue_.push(shell);
+    } else {
+      static auto msg = "failed to add user to garbage queue: user not exists";
+      LOG(ERROR) << msg;
+      throw invalid_argument(msg);
+    }
+  } else {
+    static auto msg =
+        "failed to add user to garbage queue: uid and ufd not correspond to "
+        "same user";
+    LOG(ERROR) << msg;
+    throw invalid_argument(msg);
+  }
+}
+
 void ShellConsole::Run() {
   fd_set readfds;
-  char msg_buffer[4096];
+  char input_buffer[4096];
 
   while (true) {
-    readfds = this->sockfds_;
+    this->ClearGarbageShells_();
 
+    readfds = this->sockfds_;
     if (select(this->maxfd_ + 1, &readfds, NULL, NULL, NULL) == -1) {
       continue;
     }
@@ -92,19 +155,25 @@ void ShellConsole::Run() {
           if (ufd > this->maxfd_) {
             this->maxfd_ = ufd;
           }
-          shell->SendWelcomeMessage_();
+          this->SendWelcomeMessage2Fd_(ufd);
           this->Broadcast(
               // NOTE: fix <ip>/<port> in login message for demo in class
               "*** User '(no name)' entered from CGILAB/511. ***\n");
-          shell->SendPrompt_();
+          this->SendPrompt2Fd_(ufd);
+          LOG(INFO) << "User connected from " << shell->addr_ << ":"
+                    << shell->port_ << " with uid:" << shell->env.GetUid();
         } else {
           auto shell = this->fd2user_map_[fd];
-          memset(msg_buffer, 0, sizeof(msg_buffer));
-          recv(fd, msg_buffer, sizeof(msg_buffer), 0);
+          if (shell == nullptr) {
+            throw runtime_error("shell with given sockfd no exists");
+          }
+          memset(input_buffer, 0, sizeof(input_buffer));
+          recv(fd, input_buffer, sizeof(input_buffer), 0);
 
-          string command(msg_buffer);
-          shell->Execute(command);
-          shell->SendPrompt_();
+          // LOG(DEBUG) << "Input received from user " << shell->env.GetUid() <<
+          // ": " << input_buffer;
+          shell->Execute(string(input_buffer));
+          this->SendPrompt2Fd_(fd);
         }
       }
     }

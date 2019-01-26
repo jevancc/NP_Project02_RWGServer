@@ -33,6 +33,9 @@
 npshell
 npshell_server
 
+# Logs
+.log
+
 # Node.js
 node_modules
 yarn-error.log

@@ -62,12 +62,7 @@ ExecError Execute(const vector<string>& argv_, Shell& shell) {
   }
 
 ExecError exit(const vector<string>& argv_, Shell& shell) {
-  for (int i = 0; i < kMaxDelayedPipes; i++) {
-    for (auto& pid : shell.env.GetDelayedChildProcesses(i)) {
-      ::kill(pid, SIGKILL);
-    }
-  }
-  ::exit(0);
+  shell.console_.DeleteUser(shell.env.GetUid(), shell.GetSockfd());
   return ExecError::kSuccess;
 }
 
@@ -137,10 +132,9 @@ ExecError who(const vector<string>& argv_, Shell& shell) {
     auto user = user_w.lock();
     if (user) {
       cout << user->env.GetUid() << "\t" << user->env.GetName() << "\t"
-           << "CGILAB/511"
-           << "\t";
+           << "CGILAB/511";
       if (user->env.GetUid() == shell.env.GetUid()) {
-        cout << "<- me";
+        cout << "\t<- me";
       }
       cout << endl;
     }

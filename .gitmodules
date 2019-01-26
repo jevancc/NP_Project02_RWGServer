@@ -1,3 +1,6 @@
 [submodule "lib/optional-lite"]
 	path = lib/optional-lite
 	url = https://github.com/martinmoene/optional-lite.git
+[submodule "lib/easyloggingpp"]
+	path = lib/easyloggingpp
+	url = https://github.com/zuhd-org/easyloggingpp.git

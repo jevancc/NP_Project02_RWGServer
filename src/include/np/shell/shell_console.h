@@ -30,6 +30,9 @@ class ShellConsole {
   shared_ptr<Shell> CreateShell_(sockaddr_in* client_info, int ufd);
   void ClearGarbageShells_();
 
+  ssize_t SendWelcomeMessage2Fd_(int fd) const;
+  ssize_t SendPrompt2Fd_(int fd) const;
+
  public:
   friend ExecError builtin::name(const vector<string>&, Shell&);
 
@@ -54,8 +57,7 @@ class ShellConsole {
   ssize_t Send2Fd(int fd, const string& msg) const;
   ssize_t Broadcast(const string& msg) const;
 
-  void CloseAllSockfds();
-
+  void DeleteUser(int uid, int ufd);
   void Run();
 };
 }  // namespace shell

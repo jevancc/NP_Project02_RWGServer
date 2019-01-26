@@ -16,8 +16,6 @@ class Shell : enable_shared_from_this<Shell> {
   int sockfd_;
   char addr_[INET_ADDRSTRLEN];
   char port_[8];
-  ssize_t SendWelcomeMessage_() const;
-  ssize_t SendPrompt_() const;
   ShellConsole& console_;
 
  public:
@@ -39,6 +37,8 @@ class Shell : enable_shared_from_this<Shell> {
   void Execute(string input);
   int GetSockfd() const { return this->sockfd_; }
   void CloseSockfd() { close(this->sockfd_); }
+
+  ~Shell();
 };
 }  // namespace shell
 }  // namespace np
