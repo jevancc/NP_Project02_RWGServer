@@ -65,7 +65,7 @@ void ShellConsole::ClearGarbageShells_() {
       throw runtime_error(msg);
     } else {
       stringstream ss;
-      ss << "*** User '" << shell->env.GetUid() << "' left. ***" << endl;
+      ss << "*** User '" << shell->env.GetName() << "' left. ***" << endl;
       this->Broadcast(ss.str());
 
       for (auto u_w : this->GetUsers_()) {
