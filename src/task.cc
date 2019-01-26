@@ -150,7 +150,10 @@ pid_t Task::Execute(Shell& shell) {
     const char* file = this->argv_[0].c_str();
     char** arg = this->C_Args();
     if (execvp(file, arg) < 0) {
-      cerr << "Unknown command: [" << this->argv_[0] << "]." << endl;
+      char* msg = new char[this->argv_[0].size() + 32]();
+      sprintf(msg, "Unknown command: [%s].\n", this->argv_[0].c_str());
+      cerr << msg;
+      delete msg;
       exit(0);
     }
     return ExecError::kSuccess;
