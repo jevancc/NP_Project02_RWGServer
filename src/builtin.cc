@@ -51,14 +51,14 @@ ExecError Execute(const vector<string>& argv_, Shell& shell) {
   }
 }
 
-#define _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(rs) \
-  smatch argv;                                 \
-  {                                            \
-    static regex r(rs);                        \
-    if (!regex_search(argv_[1], argv, r)) {    \
-      cerr << "Invalid arguments" << endl;     \
-      return ExecError::kSuccess;              \
-    }                                          \
+#define PARSE_AND_CHECK_ARGV_(rs)           \
+  smatch argv;                              \
+  {                                         \
+    static regex r(rs);                     \
+    if (!regex_search(argv_[1], argv, r)) { \
+      cerr << "Invalid arguments" << endl;  \
+      return ExecError::kSuccess;           \
+    }                                       \
   }
 
 ExecError exit(const vector<string>& argv_, Shell& shell) {
@@ -68,20 +68,20 @@ ExecError exit(const vector<string>& argv_, Shell& shell) {
 }
 
 ExecError printenv(const vector<string>& argv_, Shell& shell) {
-  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\S+)$)");
+  PARSE_AND_CHECK_ARGV_(R"(^\s*(\S+)$)");
   cout << shell.env.GetVariable(argv[1]) << endl;
   return ExecError::kSuccess;
 }
 
 ExecError setenv(const vector<string>& argv_, Shell& shell) {
-  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\S+)\s+(.+)$)");
+  PARSE_AND_CHECK_ARGV_(R"(^\s*(\S+)\s+(.+)$)");
   shell.env.SetVariable(argv[1], argv[2]);
   ::setenv(argv[1].str().c_str(), argv[2].str().c_str(), 1);
   return ExecError::kSuccess;
 }
 
 ExecError name(const vector<string>& argv_, Shell& shell) {
-  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
+  PARSE_AND_CHECK_ARGV_(R"(^\s*(.+)$)");
   const string& name = argv[1];
   if (shell.console_.user_names_.count(name) > 0 || name == "(no name)") {
     fmt::print(cout, "*** User '{}' already exists. ***\n", name);
@@ -97,7 +97,7 @@ ExecError name(const vector<string>& argv_, Shell& shell) {
 }
 
 ExecError yell(const vector<string>& argv_, Shell& shell) {
-  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(.+)$)");
+  PARSE_AND_CHECK_ARGV_(R"(^\s*(.+)$)");
   const string& message = argv[1];
 
   shell.console_.Broadcast(
@@ -106,7 +106,7 @@ ExecError yell(const vector<string>& argv_, Shell& shell) {
 }
 
 ExecError tell(const vector<string>& argv_, Shell& shell) {
-  _NP_SHELL_BUILTIN_PARSE_CHECK_ARGV(R"(^\s*(\d+)\s+(.+)$)");
+  PARSE_AND_CHECK_ARGV_(R"(^\s*(\d+)\s+(.+)$)");
   const string& uid_s = argv[1];
   const string& message = argv[2];
   try {
