@@ -67,7 +67,7 @@ void ShellConsole::ClearGarbageShells_() {
       throw runtime_error(msg);
     } else {
       this->Broadcast(
-          fmt::format("*** User '{}' left. ***", shell->env.GetName()));
+          fmt::format("*** User '{}' left. ***\n", shell->env.GetName()));
 
       for (auto u_w : this->GetUsers_()) {
         if (auto u = u_w.lock()) {
