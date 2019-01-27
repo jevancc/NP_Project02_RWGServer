@@ -210,7 +210,7 @@ void ShellConsole::Run() {
         } else {
           auto shell = this->fd2user_map_[fd];
           if (shell == nullptr) {
-            throw runtime_error("shell with given sockfd no exists");
+            throw runtime_error("shell with given sockfd not exists");
           } else if (!shell->IsAlive()) {
             continue;
           }
