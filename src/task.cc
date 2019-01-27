@@ -15,7 +15,7 @@
 #include <algorithm>
 #include <iostream>
 #include <nonstd/optional.hpp>
-#include <sstream>
+#include <numeric>
 #include <string>
 #include <vector>
 using namespace std;
@@ -27,28 +27,29 @@ string IOOption::ToString() const {
     case IO::kInherit:
       return fmt::format("Inherit");
     case IO::kDelayedPipe:
-      return fmt::format("Delayed Pipe {}", this->i_data);
+      return fmt::format("Delayed Pipe [line: {}]", this->i_data);
       break;
     case IO::kUserPipe:
-      return fmt::format("User Pipe {}", this->i_data);
+      return fmt::format("User Pipe [uid: {}]", this->i_data);
     case IO::kFile:
-      return fmt::format("File \"{}\"", this->s_data);
+      return fmt::format("File [filename: {}]", this->s_data);
     default:
-      return fmt::format("Unknown type[{}]", this->type);
+      return fmt::format("Unknown type[{0}][i_data: {1}][s_data: {2}]",
+                         this->type, this->i_data, this->s_data);
   }
 }
 
 string Task::ToString() const {
-  string s = "Task {\n\t";
-  for (auto& a : this->argv_) {
-    s += a + " ";
-  }
-  s += "\n";
-  s += "\tStdin: " + this->stdin_.ToString() + "\n";
-  s += "\tStdout: " + this->stdout_.ToString() + "\n";
-  s += "\tStderr: " + this->stderr_.ToString() + "\n";
-  s += "\n}";
-  return s;
+  return fmt::format(
+      "Task: {0}\n"
+      "\tStdin: {1}\n"
+      "\tStdout: {2}\n"
+      "\tStderr: {3}\n",
+      accumulate(next(this->argv_.begin()), this->argv_.end(),
+                 string(this->argv_[0]),
+                 [](string a, const string& b) { return move(a) + ' ' + b; }),
+      this->stdin_.ToString(), this->stdout_.ToString(),
+      this->stderr_.ToString());
 }
 
 char** Task::C_Args() const {

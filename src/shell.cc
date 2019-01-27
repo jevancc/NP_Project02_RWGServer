@@ -24,7 +24,8 @@ Shell::Shell(sockaddr_in* client_info, int sockfd, int uid,
              ShellConsole& console)
     : is_alive_(true), console_(console), env(uid) {
   inet_ntop(AF_INET, &(client_info->sin_addr), this->addr_, INET_ADDRSTRLEN);
-  sprintf(this->port_, "%d", client_info->sin_port);
+  fmt::format_to_n(this->port_, sizeof(this->port_), "{}",
+                   client_info->sin_port);
   this->sockfd_ = sockfd;
   builtin::setenv({"setenv", "PATH bin:."}, *this);
   builtin::setenv({"setenv", "LANG en_US.UTF-8"}, *this);
