@@ -122,9 +122,9 @@ class Environment {
   string name_;
 
   shared_ptr<Pipe> delayed_pipes_[kMaxDelayedPipes];
-  shared_ptr<Pipe> user_pipes_[kMaxShellUsers];
+  map<int, shared_ptr<Pipe>> user_pipes_;
   vector<pid_t> delayed_child_processes_[kMaxDelayedPipes];
-  vector<pid_t> user_child_processes_[kMaxShellUsers];
+  map<int, vector<pid_t>> user_child_processes_;
   map<string, string> variables_;
 
  public:
@@ -146,13 +146,16 @@ class Environment {
 
   void SetVariable(const string& var, const string& val);
   const string& GetVariable(const string& var) const;
-  const map<string, string>& GetVariables() const;
+  const map<string, string>& GetVariables() const { return this->variables_; }
 
   vector<pid_t>& GetDelayedChildProcesses(int line = 0);
   void AddDelayedChildProcess(int line, pid_t pid);
   void Move2DelayedChildProcesses(int line, vector<pid_t>& pids);
 
   vector<pid_t>& GetUserChildProcesses(int uid);
+  map<int, vector<pid_t>>& GetAllUserChildProcesses() {
+    return this->user_child_processes_;
+  }
   void AddUserChildProcess(int uid, pid_t pid);
   void Move2UserChildProcesses(int uid, vector<pid_t>& pids);
 

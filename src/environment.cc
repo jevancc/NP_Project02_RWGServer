@@ -48,11 +48,7 @@ void Environment::SetUserPipe(int uid, shared_ptr<Pipe> pipe) {
   this->user_pipes_[uid].swap(pipe);
 }
 void Environment::CloseUserPipe(int uid) { this->user_pipes_[uid].reset(); }
-void Environment::CloseAllUserPipes() {
-  for (int i = 0; i < kMaxShellUsers; i++) {
-    this->user_pipes_[i].reset();
-  }
-}
+void Environment::CloseAllUserPipes() { this->user_pipes_.clear(); }
 
 void Environment::SetVariable(const string& var, const string& val) {
   this->variables_[var] = val;
@@ -65,9 +61,6 @@ const string& Environment::GetVariable(const string& var) const {
     static const string empty_str;
     return empty_str;
   }
-}
-const map<string, string>& Environment::GetVariables() const {
-  return this->variables_;
 }
 
 vector<pid_t>& Environment::GetDelayedChildProcesses(int line) {

@@ -169,11 +169,12 @@ Shell::~Shell() {
       ::kill(pid, SIGKILL);
     }
   }
-  for (int i = 0; i < kMaxShellUsers; i++) {
-    for (auto& pid : this->env.GetUserChildProcesses(i)) {
+  for (auto& user : this->env.GetAllUserChildProcesses()) {
+    for (auto& pid : user.second) {
       ::kill(pid, SIGKILL);
     }
   }
+
   ::close(this->sockfd_);
   spdlog::info("User {} disconnected", this->env.GetUid());
 }
