@@ -75,7 +75,7 @@ class ShellConsole {
            this->id2user_map_[uid] != nullptr;
   }
   optional<string> GetUserName(int uid) const;
-  void DeleteUser(int uid, int ufd);
+  void DeleteUser(Shell& shell);
   void Run();
 };
 }  // namespace shell

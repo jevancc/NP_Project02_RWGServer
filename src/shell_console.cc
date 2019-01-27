@@ -134,20 +134,15 @@ optional<string> ShellConsole::GetUserName(int uid) const {
   }
 }
 
-void ShellConsole::DeleteUser(int uid, int ufd) {
-  if (this->id2user_map_[uid] == this->fd2user_map_[ufd]) {
-    auto shell = this->id2user_map_[uid];
-    if (shell != nullptr) {
-      this->garbage_shell_queue_.push(shell);
-    } else {
-      static auto msg = "failed to add user to garbage queue: user not exists";
-      spdlog::error(msg);
-      throw invalid_argument(msg);
-    }
+void ShellConsole::DeleteUser(Shell& shell) {
+  int uid = shell.env.GetUid();
+  int ufd = shell.GetSockfd();
+  auto shell_ptr = this->id2user_map_[uid];
+  if (shell_ptr != nullptr && shell_ptr == this->fd2user_map_[ufd]) {
+    this->garbage_shell_queue_.push(shell_ptr);
   } else {
     static auto msg =
-        "failed to add user to garbage queue: uid and ufd not correspond to "
-        "same user";
+        "failed to add user to garbage queue: user not belongs to this console";
     spdlog::error(msg);
     throw invalid_argument(msg);
   }

@@ -62,7 +62,7 @@ ExecError Execute(const vector<string>& argv_, Shell& shell) {
   }
 
 ExecError exit(const vector<string>& argv_, Shell& shell) {
-  shell.console_.DeleteUser(shell.env.GetUid(), shell.GetSockfd());
+  shell.console_.DeleteUser(shell);
   shell.is_alive_ = false;
   return ExecError::kSuccess;
 }
