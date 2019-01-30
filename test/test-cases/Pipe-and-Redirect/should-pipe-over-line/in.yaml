@@ -1,0 +1,29 @@
+- _CONNECT: 1
+- 1: echo line1 | cat |1
+- 1: cat
+- 1: echo line3 | cat |1
+- 1: cat | cat | cat
+- 1: echo line5 | cat |2
+- 1: echo line6 | cat |2
+- 1: cat
+- 1: cat | cat
+- 1: echo line9 | cat |3
+- _SLEEP: 2000
+- 1: ''
+- 1: ''
+- 1: echo line13 | cat |1
+- 1: cat | cat
+- 1: echo line15 | cat |1
+- 1: cat | cat | cat |1
+- 1: cat | cat | cat |2
+- 1: echo line18
+- 1: cat | cat
+- 1: echo line20 |2
+- 1: echo line21 |2
+- 1: cat
+- 1: cat
+- 1: echo line24 | cat |1
+- 1: ''
+- 1: ''
+- 1: cat
+- 1: exit

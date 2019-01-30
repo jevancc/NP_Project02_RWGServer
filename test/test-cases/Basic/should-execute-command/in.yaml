@@ -1,0 +1,9 @@
+- _CONNECT: 1
+- 1: ls
+- 1: cat test.html
+- 1: ''
+- 1: ''
+- 1: ''
+- 1: ''
+- 1: cat blank.txt
+- 1: exit

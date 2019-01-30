@@ -1,4 +1,0 @@
-ls
-I AM NOT A VALID COMMAND
-touch temp.txt
-exit

@@ -1,0 +1,33 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo line1 | cat
+  RECV:
+    - 1: line1
+    - 1: '% '
+- COMMAND:
+    1: echo line2 | cat | cat
+  RECV:
+    - 1: line2
+    - 1: '% '
+- COMMAND:
+    1: echo line2 | cat | cat | cat
+  RECV:
+    - 1: line2
+    - 1: '% '
+- COMMAND:
+    1: echo line2 | cat | cat | cat | cat
+  RECV:
+    - 1: line2
+    - 1: '% '
+- COMMAND:
+    1: echo line2 | cat | cat | ls  | cat
+  RECV:
+    - 1: bin
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []

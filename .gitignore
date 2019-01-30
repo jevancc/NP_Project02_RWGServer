@@ -30,8 +30,11 @@
 *.exe
 *.out
 *.app
-npshell
-npshell_server
+np_simple
+
+# Logs and Reports
+*.log
+test/mochawesome-report
 
 # Node.js
 node_modules
@@ -42,4 +45,4 @@ build
 
 # Test Cases builds
 test/_workSpace
-test/**/_workSpaceTemplate
+test/**/_template

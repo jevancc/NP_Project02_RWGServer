@@ -5,82 +5,124 @@ const fs = require("fs");
 const net = require("net");
 const child_process = require("child_process");
 const util = require("util");
+const yaml = require("js-yaml");
+const psTree = require("ps-tree");
+const tcpPortUsed = require("tcp-port-used");
+const delayClient = require("./lib/DelayClient");
 
-const execPath = path.resolve("npshell_server");
-const workSpaceDir = path.resolve("test/_workSpace");
+const ExecPath = path.resolve("np_simple");
+const ExecCheckShm = path.resolve("test/bin/shm.sh");
+const ExecCheckZombie = path.resolve("test/bin/zombie.sh");
 
-let serverPortStart = 12300;
+const WorkspaceDir = path.resolve("test/_workspace");
 
-describe("TestCases", () => {
-  shell.cd("test");
+const Mode = process.env.TEST_MODE;
+const CommandDelayTime = process.env.DELAY || 200;
+const ServerPort = parseInt(process.env.PORT) || 12300;
+const ServerStartDelay = process.env.SERVER_START_DELAY || 100;
+const ServerStopDelay = process.env.SERVER_END_DELAY || 100;
 
-  shell
-    .ls("-l", "cases")
-    .filter(c => c && c.name.charAt(0) != "_")
-    .forEach(item => {
-      describe(item.name, () => {
-        let testItemDir = path.resolve("cases", item.name);
-        shell.mkdir("-p", path.join(testItemDir, "_workSpaceTemplate"));
-        shell.exec("make", {
-          silent: true,
-          cwd: path.join(testItemDir, "_workSpacePrepare")
-        });
-        const itemWorkSpace = path.resolve(workSpaceDir, item.name);
+const sleep = t => new Promise(r => setTimeout(() => r(), t || 100));
 
-        shell
-          .ls("-l", testItemDir)
-          .filter((c, i) => c && c.name.charAt(0) != "_")
-          .forEach(c => {
-            const caseWorkSpace = path.join(itemWorkSpace, c.name);
-            shell.mkdir("-p", caseWorkSpace);
-            shell.cp(
-              "-R",
-              path.join(testItemDir, "_workSpaceTemplate/*"),
-              caseWorkSpace
-            );
+shell.cd(__dirname);
+shell
+  .ls("-l", "test-cases")
+  .filter(g => g && g.name.charAt(0) != "_" && g.isDirectory())
+  .forEach(group => {
+    describe(group.name, function() {
+      const groupDir = path.resolve("test-cases", group.name);
+      shell.mkdir("-p", path.join(groupDir, "_template"));
+      shell.exec("make", {
+        silent: true,
+        cwd: path.join(groupDir, "_prepare")
+      });
+      const groupWorkspace = path.resolve(WorkspaceDir, group.name);
 
-            let serverPort = serverPortStart++;
-            let shellServerProcess = child_process.spawn(
-              execPath,
-              [serverPort],
-              {
+      shell
+        .ls("-l", groupDir)
+        .filter(c => c && c.name.charAt(0) != "_" && c.isDirectory())
+        .forEach((test, i) => {
+          describe(test.name, function() {
+            let serverProcess;
+            const testDir = path.join(groupDir, test.name);
+            const testWorkspace = path.join(groupWorkspace, test.name);
+
+            before(async function() {
+              this.enableTimeouts(false);
+
+              shell.mkdir("-p", testWorkspace);
+              shell.cp("-r", path.join(groupDir, "_template/*"), testWorkspace);
+
+              await tcpPortUsed.waitUntilFree(ServerPort, 500);
+              serverProcess = child_process.spawn(ExecPath, [ServerPort], {
                 silent: true,
-                cwd: caseWorkSpace
-              }
-            );
-
-            let testCaseDir = path.join(testItemDir, c.name);
-            it(c.name, async () => {
-              let client = new net.Socket();
-              client.connect(serverPort, "localhost", () => {
-                client.write(fs.readFileSync(path.join(testCaseDir, "in.txt")));
-                setTimeout(() => {
-                  client.destroy();
-                }, 9000);
+                cwd: testWorkspace
               });
+              await sleep(ServerStartDelay);
+            });
 
-              let shellOutput = "";
-              client.on("data", data => {
-                shellOutput += data;
-              });
+            it("correct-output", async function() {
+              this.slow(20000);
+              this.timeout(0);
 
-              return new Promise(resolve => {
-                client.on("close", () => {
-                  shellServerProcess.kill();
-                  shellOutput.should.be.eql(
-                    fs
-                      .readFileSync(path.join(testCaseDir, "out.txt"))
-                      .toString()
-                  );
-                  resolve();
-                });
+              let commands = yaml.safeLoad(
+                await util.promisify(fs.readFile)(
+                  path.join(testDir, "in.yaml"),
+                  "utf8"
+                ),
+                {
+                  schema: yaml.FAILSAFE_SCHEMA
+                }
+              );
+              let answerYAML = await util.promisify(fs.readFile)(
+                path.join(testDir, "out.yaml"),
+                "utf8"
+              );
+              let answer =
+                Mode === "yaml"
+                  ? answerYAML
+                  : yaml.safeLoad(answerYAML, {
+                      schema: yaml.FAILSAFE_SCHEMA
+                    });
+
+              let result = await (Mode === "yaml"
+                ? delayClient.yaml
+                : delayClient)(
+                "127.0.0.1",
+                ServerPort,
+                commands,
+                CommandDelayTime
+              );
+
+              result.should.be.eql(answer);
+            });
+
+            it("no-zombie-processes", async function() {
+              this.slow(5000);
+              this.timeout(0);
+
+              let children = await util.promisify(psTree)(serverProcess.pid);
+              serverProcess.kill();
+              await sleep(ServerStopDelay);
+
+              let existsZombieProcesses = false;
+              children.forEach(c => {
+                try {
+                  process.kill(c.PID, 9);
+                  existsZombieProcesses = true;
+                } catch (e) {
+                  if (e.code === "EPERM") {
+                    existsZombieProcesses = true;
+                  }
+                }
               });
-            }).timeout(10000);
+              existsZombieProcesses.should.be.eql(false);
+            });
           });
-
-        after(() => {
-          shell.rm("-Rf", itemWorkSpace);
         });
+
+      after(function() {
+        shell.rm("-Rf", groupWorkspace);
       });
     });
-});
+  });

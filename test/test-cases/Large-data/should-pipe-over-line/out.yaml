@@ -1,0 +1,412 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: dump0 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: count0
+  RECV:
+    - 1: 20000000
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []

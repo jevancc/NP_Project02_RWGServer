@@ -1,0 +1,21 @@
+- _CONNECT: 1
+- 1: echo helloworld | cat !1
+- 1: cat | cat | cat
+- 1: INVALID_COMMAND !1
+- 1: cat
+- 1: INVALID_COMMAND !2
+- 1: echo helloworld
+- 1: cat | cat | cat
+- 1: INVALID_COMMAND !1
+- 1: cat | cat | cat |1
+- 1: cat | cat | cat !1
+- 1: cat
+- 1: INVALID_COMMAND | cat !2
+- 1: echo helloworld | cat !2
+- 1: cat
+- 1: cat
+- 1: INVALID_COMMAND | cat !1
+- 1: ''
+- 1: ''
+- 1: cat
+- 1: exit

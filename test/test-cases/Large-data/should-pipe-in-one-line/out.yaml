@@ -1,0 +1,15 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: >-
+      dump0 | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat
+      | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat
+      | cat | cat | cat | cat | cat | cat | count0
+  RECV:
+    - 1: 20000000
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []

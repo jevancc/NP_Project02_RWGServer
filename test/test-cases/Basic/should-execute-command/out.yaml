@@ -1,0 +1,44 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: cat test.html
+  RECV:
+    - 1: <!test.html>
+    - 1: <TITLE>Test</TITLE>
+    - 1: <BODY>This is a <b>test</b> program
+    - 1: for ras.
+    - 1: </BODY>
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat blank.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []

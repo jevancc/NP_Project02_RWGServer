@@ -1,0 +1,82 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: 'Unknown command: [echo].'
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH bin2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: 'Unknown command: [ls].'
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH bin
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: 'Unknown command: [echo].'
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH .
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: 'Unknown command: [ls].'
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: 'Unknown command: [echo].'
+    - 1: '% '
+- COMMAND:
+    1: 'setenv PATH bin:bin2'
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []

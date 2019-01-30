@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+const fs = require("fs");
+const net = require("net");
+const util = require("util");
+const yaml = require("js-yaml");
+const delayClient = require("../lib/DelayClient");
+const argv = require("yargs")
+  .usage("$0 <server ip> <port> <command file> [options]")
+  .demand(3)
+  .option("delay", {
+    alias: "d",
+    describe: "delay between commands (ms)",
+    default: 500
+  })
+  .option("output", {
+    alias: "o",
+    describe: "output file"
+  })
+  .help()
+  .alias("help", "h")
+  .version(false).argv;
+
+(async () => {
+  let [ip, port, file] = argv._;
+  let input = yaml.safeLoad(await util.promisify(fs.readFile)(file, "utf8"), {
+    schema: yaml.FAILSAFE_SCHEMA
+  });
+  let output = await delayClient.yaml(ip, port, input, argv.delay);
+  if (argv.output) {
+    await util.promisify(fs.writeFile)(argv.output, output);
+  } else {
+    console.log(output);
+  }
+})();

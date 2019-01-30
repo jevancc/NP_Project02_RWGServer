@@ -1,9 +1,0 @@
-% % helloworld
-% % Unknown command: [INVALID_COMMAND].
-% % helloworld
-% Unknown command: [INVALID_COMMAND].
-% % % % Unknown command: [INVALID_COMMAND].
-% % % Unknown command: [INVALID_COMMAND].
-% helloworld
-% % % % Unknown command: [INVALID_COMMAND].
-% 

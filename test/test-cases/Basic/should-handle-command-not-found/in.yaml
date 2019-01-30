@@ -1,0 +1,5 @@
+- _CONNECT: 1
+- 1: ls
+- 1: I AM NOT A VALID COMMAND
+- 1: touch temp.txt
+- 1: exit

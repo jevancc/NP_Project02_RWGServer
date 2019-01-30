@@ -1,0 +1,91 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld | cat !1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: INVALID_COMMAND !1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: 'Unknown command: [INVALID_COMMAND].'
+    - 1: '% '
+- COMMAND:
+    1: INVALID_COMMAND !2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat
+  RECV:
+    - 1: 'Unknown command: [INVALID_COMMAND].'
+    - 1: '% '
+- COMMAND:
+    1: INVALID_COMMAND !1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat !1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: 'Unknown command: [INVALID_COMMAND].'
+    - 1: '% '
+- COMMAND:
+    1: INVALID_COMMAND | cat !2
+  RECV:
+    - 1: '% Unknown command: [INVALID_COMMAND].'
+    - 1: ''
+- COMMAND:
+    1: echo helloworld | cat !2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: INVALID_COMMAND | cat !1
+  RECV:
+    - 1: '% Unknown command: [INVALID_COMMAND].'
+    - 1: ''
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV: []
