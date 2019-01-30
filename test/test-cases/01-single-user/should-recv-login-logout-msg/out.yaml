@@ -1,0 +1,13 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

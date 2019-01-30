@@ -1,0 +1,165 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    _CONNECT: 3
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '****************************************'
+    - 3: '** Welcome to the information server. **'
+    - 3: '****************************************'
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\t(no name)\tCGILAB/511\t<-me"
+    - 1: "2\t(no name)\tCGILAB/511"
+    - 1: "3\t(no name)\tCGILAB/511"
+    - 1: '% '
+- COMMAND:
+    2: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+- COMMAND:
+    3: who
+  RECV:
+    - 3: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 3: "1\t(no name)\tCGILAB/511"
+    - 3: "3\t(no name)\tCGILAB/511\t<-me"
+    - 3: '% '
+- COMMAND:
+    _CONNECT: 4
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: ''
+    - 4: '****************************************'
+    - 4: '** Welcome to the information server. **'
+    - 4: '****************************************'
+    - 4: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 4: '% '
+- COMMAND:
+    _CONNECT: 5
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 4: ''
+    - 5: '****************************************'
+    - 5: '** Welcome to the information server. **'
+    - 5: '****************************************'
+    - 5: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 5: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\t(no name)\tCGILAB/511\t<-me"
+    - 1: "2\t(no name)\tCGILAB/511"
+    - 1: "3\t(no name)\tCGILAB/511"
+    - 1: "4\t(no name)\tCGILAB/511"
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' left. ***'
+    - 4: ''
+    - 5: '*** User ''(no name)'' left. ***'
+    - 5: ''
+- COMMAND:
+    4: exit
+  RECV:
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' left. ***'
+    - 4: ''
+    - 5: '*** User ''(no name)'' left. ***'
+    - 5: ''
+- COMMAND:
+    5: who
+  RECV:
+    - 5: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 5: "3\t(no name)\tCGILAB/511"
+    - 5: "4\t(no name)\tCGILAB/511\t<-me"
+    - 5: '% '
+- COMMAND:
+    3: exit
+  RECV:
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+    - 5: '*** User ''(no name)'' left. ***'
+    - 5: ''
+- COMMAND:
+    5: exit
+  RECV:
+    - 5: '*** User ''(no name)'' left. ***'
+    - 5: ''
+- COMMAND:
+    _CONNECT: 6
+  RECV:
+    - 6: '****************************************'
+    - 6: '** Welcome to the information server. **'
+    - 6: '****************************************'
+    - 6: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 6: '% '
+- COMMAND:
+    _CONNECT: 7
+  RECV:
+    - 6: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 6: ''
+    - 7: '****************************************'
+    - 7: '** Welcome to the information server. **'
+    - 7: '****************************************'
+    - 7: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 7: '% '
+- COMMAND:
+    6: who
+  RECV:
+    - 6: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 6: "1\t(no name)\tCGILAB/511\t<-me"
+    - 6: "2\t(no name)\tCGILAB/511"
+    - 6: '% '
+- COMMAND:
+    6: exit
+  RECV:
+    - 6: '*** User ''(no name)'' left. ***'
+    - 6: ''
+    - 7: '*** User ''(no name)'' left. ***'
+    - 7: ''
+- COMMAND:
+    7: exit
+  RECV:
+    - 7: '*** User ''(no name)'' left. ***'
+    - 7: ''

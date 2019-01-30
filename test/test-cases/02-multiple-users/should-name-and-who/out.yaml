@@ -1,0 +1,121 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\t(no name)\tCGILAB/511\t<-me"
+    - 1: '% '
+- COMMAND:
+    1: name USER_1
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 1: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\tUSER_1\tCGILAB/511\t<-me"
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\tUSER_1\tCGILAB/511\t<-me"
+    - 1: "2\t(no name)\tCGILAB/511"
+    - 1: '% '
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tUSER_1\tCGILAB/511"
+    - 2: "2\t(no name)\tCGILAB/511\t<-me"
+    - 2: '% '
+- COMMAND:
+    2: name USER_2
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_2''. ***'
+    - 1: ''
+    - 2: '*** User from CGILAB/511 is named ''USER_2''. ***'
+    - 2: '% '
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\tUSER_1\tCGILAB/511\t<-me"
+    - 1: "2\tUSER_2\tCGILAB/511"
+    - 1: '% '
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tUSER_1\tCGILAB/511"
+    - 2: "2\tUSER_2\tCGILAB/511\t<-me"
+    - 2: '% '
+- COMMAND:
+    1: name USER_1_NEW
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_1_NEW''. ***'
+    - 1: '% '
+    - 2: '*** User from CGILAB/511 is named ''USER_1_NEW''. ***'
+    - 2: ''
+- COMMAND:
+    1: who
+  RECV:
+    - 1: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 1: "1\tUSER_1_NEW\tCGILAB/511\t<-me"
+    - 1: "2\tUSER_2\tCGILAB/511"
+    - 1: '% '
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tUSER_1_NEW\tCGILAB/511"
+    - 2: "2\tUSER_2\tCGILAB/511\t<-me"
+    - 2: '% '
+- COMMAND:
+    2: name USER_1_NEW
+  RECV:
+    - 2: '*** User ''USER_1_NEW'' already exists. ***'
+    - 2: '% '
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tUSER_1_NEW\tCGILAB/511"
+    - 2: "2\tUSER_2\tCGILAB/511\t<-me"
+    - 2: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''USER_1_NEW'' left. ***'
+    - 1: ''
+    - 2: '*** User ''USER_1_NEW'' left. ***'
+    - 2: ''
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "2\tUSER_2\tCGILAB/511\t<-me"
+    - 2: '% '
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''USER_2'' left. ***'
+    - 2: ''

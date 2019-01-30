@@ -1,0 +1,81 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: printenv NP_ENV
+  RECV:
+    - 1: ''
+    - 1: '% '
+- COMMAND:
+    2: printenv NP_ENV
+  RECV:
+    - 2: ''
+    - 2: '% '
+- COMMAND:
+    1: setenv NP_ENV npnp111
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: printenv NP_ENV
+  RECV:
+    - 1: npnp111
+    - 1: '% '
+- COMMAND:
+    2: printenv NP_ENV
+  RECV:
+    - 2: ''
+    - 2: '% '
+- COMMAND:
+    2: setenv NP_ENV npnp222
+  RECV:
+    - 2: '% '
+- COMMAND:
+    1: printenv NP_ENV
+  RECV:
+    - 1: npnp111
+    - 1: '% '
+- COMMAND:
+    2: printenv NP_ENV
+  RECV:
+    - 2: npnp222
+    - 2: '% '
+- COMMAND:
+    1: 'setenv PATH ./bin:./bin2'
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: touch file1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    2: touch file2
+  RECV:
+    - 2: 'Unknown command: [touch].'
+    - 2: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''

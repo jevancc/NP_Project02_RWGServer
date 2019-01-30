@@ -33,8 +33,9 @@
 npshell
 npserver_single_proc
 
-# Logs
+# Logs and Reports
 *.log
+test/mochawesome-report
 
 # Node.js
 node_modules
@@ -44,5 +45,5 @@ yarn-error.log
 build
 
 # Test Cases builds
-test/_workSpace
-test/**/_workSpaceTemplate
+test/_workspace
+test/**/_template

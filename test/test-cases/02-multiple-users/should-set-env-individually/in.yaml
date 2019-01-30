@@ -1,0 +1,15 @@
+- _CONNECT: 1
+- _CONNECT: 2
+- 1: printenv NP_ENV
+- 2: printenv NP_ENV
+- 1: setenv NP_ENV npnp111
+- 1: printenv NP_ENV
+- 2: printenv NP_ENV
+- 2: setenv NP_ENV npnp222
+- 1: printenv NP_ENV
+- 2: printenv NP_ENV
+- 1: setenv PATH ./bin:./bin2
+- 1: touch file1
+- 2: touch file2
+- 1: exit
+- 2: exit

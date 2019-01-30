@@ -1,0 +1,92 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld > file1.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file1.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: cat file1.txt
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld | cat | cat > file2.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file1.txt
+    - 1: file2.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: cat file2.txt
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: echo goodbyeworld > file1.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file1.txt
+    - 1: file2.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: cat file1.txt
+  RECV:
+    - 1: goodbyeworld
+    - 1: '% '
+- COMMAND:
+    1: echo helloworld | cat | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat > file1.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file1.txt
+    - 1: file2.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: cat file1.txt
+  RECV:
+    - 1: helloworld
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

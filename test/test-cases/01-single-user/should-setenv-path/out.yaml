@@ -1,0 +1,89 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: touch file1
+  RECV:
+    - 1: 'Unknown command: [touch].'
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH bin2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: touch file2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: 'Unknown command: [ls].'
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH bin
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: touch file3
+  RECV:
+    - 1: 'Unknown command: [touch].'
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file2
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH .
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: touch file4
+  RECV:
+    - 1: 'Unknown command: [touch].'
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: 'Unknown command: [ls].'
+    - 1: '% '
+- COMMAND:
+    1: 'setenv PATH bin:bin2'
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: touch file5
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: file2
+    - 1: file5
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

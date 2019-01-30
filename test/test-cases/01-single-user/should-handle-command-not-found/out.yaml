@@ -1,0 +1,31 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: ls
+  RECV:
+    - 1: bin
+    - 1: bin2
+    - 1: blank.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    1: I AM NOT A VALID COMMAND
+  RECV:
+    - 1: 'Unknown command: [I].'
+    - 1: '% '
+- COMMAND:
+    1: touch temp.txt
+  RECV:
+    - 1: 'Unknown command: [touch].'
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

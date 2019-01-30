@@ -1,0 +1,6 @@
+- _CONNECT: 1
+- 1: setenv __NP_ENV_npNpnPNP__ npnpnp
+- 1: printenv __NP_ENV_npNpnPNP__
+- 1: setenv __NP_ENV_npNpnPNP__ NPNPNP
+- 1: printenv __NP_ENV_npNpnPNP__
+- 1: exit

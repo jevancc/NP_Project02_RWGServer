@@ -1,0 +1,34 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: dump0 |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: count0
+  RECV:
+    - 1: 20000000
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

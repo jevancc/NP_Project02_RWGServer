@@ -1,0 +1,31 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: setenv __NP_ENV_npNpnPNP__ npnpnp
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: printenv __NP_ENV_npNpnPNP__
+  RECV:
+    - 1: npnpnp
+    - 1: '% '
+- COMMAND:
+    1: setenv __NP_ENV_npNpnPNP__ NPNPNP
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: printenv __NP_ENV_npNpnPNP__
+  RECV:
+    - 1: NPNPNP
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

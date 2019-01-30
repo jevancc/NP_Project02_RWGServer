@@ -1,0 +1,261 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: echo str >1
+  RECV:
+    - 1: '*** (no name) (#1) just piped ''echo str >1'' to (no name) (#1) ***'
+    - 1: '% '
+- COMMAND:
+    1: cat <1
+  RECV:
+    - 1: '*** (no name) (#1) just received from (no name) (#1) by ''cat <1'' ***'
+    - 1: str
+    - 1: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** Error: user #2 does not exist yet. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** (no name) (#1) just piped ''echo str >2'' to (no name) (#2) ***'
+    - 1: '% '
+    - 2: '*** (no name) (#1) just piped ''echo str >2'' to (no name) (#2) ***'
+    - 2: ''
+- COMMAND:
+    2: cat <1
+  RECV:
+    - 1: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1'' ***'
+    - 1: ''
+    - 2: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1'' ***'
+    - 2: str
+    - 2: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** (no name) (#1) just piped ''echo str >2'' to (no name) (#2) ***'
+    - 1: '% '
+    - 2: '*** (no name) (#1) just piped ''echo str >2'' to (no name) (#2) ***'
+    - 2: ''
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** Error: the pipe #1->#2 already exists. ***'
+    - 1: '% '
+- COMMAND:
+    2: cat <1
+  RECV:
+    - 1: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1'' ***'
+    - 1: ''
+    - 2: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1'' ***'
+    - 2: str
+    - 2: '% '
+- COMMAND:
+    2: cat <1
+  RECV:
+    - 2: '*** Error: the pipe #1->#2 does not exist yet. ***'
+    - 2: '% '
+- COMMAND:
+    _CONNECT: 3
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '****************************************'
+    - 3: '** Welcome to the information server. **'
+    - 3: '****************************************'
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: '% '
+- COMMAND:
+    1: name USER_1
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 1: '% '
+    - 2: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 3: ''
+- COMMAND:
+    2: name USER_2
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_2''. ***'
+    - 1: ''
+    - 2: '*** User from CGILAB/511 is named ''USER_2''. ***'
+    - 2: '% '
+    - 3: '*** User from CGILAB/511 is named ''USER_2''. ***'
+    - 3: ''
+- COMMAND:
+    3: name USER_3
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_3''. ***'
+    - 1: ''
+    - 2: '*** User from CGILAB/511 is named ''USER_3''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''USER_3''. ***'
+    - 3: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 1: '% '
+    - 2: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 2: ''
+    - 3: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 3: ''
+- COMMAND:
+    2: cat <1 >3
+  RECV:
+    - 1: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 >3'' ***'
+    - 1: '*** USER_2 (#2) just piped ''cat <1 >3'' to USER_3 (#3) ***'
+    - 1: ''
+    - 2: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 >3'' ***'
+    - 2: '*** USER_2 (#2) just piped ''cat <1 >3'' to USER_3 (#3) ***'
+    - 2: '% '
+    - 3: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 >3'' ***'
+    - 3: '*** USER_2 (#2) just piped ''cat <1 >3'' to USER_3 (#3) ***'
+    - 3: ''
+- COMMAND:
+    3: cat <2
+  RECV:
+    - 1: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 1: ''
+    - 2: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 2: ''
+    - 3: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 3: str
+    - 3: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 1: '% '
+    - 2: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 2: ''
+    - 3: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 3: ''
+- COMMAND:
+    2: cat <1 | number
+  RECV:
+    - 1: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 | number'' ***'
+    - 1: ''
+    - 2: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 | number'' ***'
+    - 2: '   1 str'
+    - 2: '% '
+    - 3: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 | number'' ***'
+    - 3: ''
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 1: '% '
+    - 2: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 2: ''
+    - 3: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 3: ''
+- COMMAND:
+    2: cat <1 |1
+  RECV:
+    - 1: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 |1'' ***'
+    - 1: ''
+    - 2: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 |1'' ***'
+    - 2: '% '
+    - 3: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 |1'' ***'
+    - 3: ''
+- COMMAND:
+    2: cat
+  RECV:
+    - 2: str
+    - 2: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 1: '% '
+    - 2: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 2: ''
+    - 3: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 3: ''
+- COMMAND:
+    2: cat <1 > aa.txt
+  RECV:
+    - 1: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 > aa.txt'' ***'
+    - 1: ''
+    - 2: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 > aa.txt'' ***'
+    - 2: '% '
+    - 3: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat <1 > aa.txt'' ***'
+    - 3: ''
+- COMMAND:
+    2: cat aa.txt
+  RECV:
+    - 2: str
+    - 2: '% '
+- COMMAND:
+    1: echo str >2
+  RECV:
+    - 1: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 1: '% '
+    - 2: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 2: ''
+    - 3: '*** USER_1 (#1) just piped ''echo str >2'' to USER_2 (#2) ***'
+    - 3: ''
+- COMMAND:
+    2: cat >3 <1
+  RECV:
+    - 1: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat >3 <1'' ***'
+    - 1: '*** USER_2 (#2) just piped ''cat >3 <1'' to USER_3 (#3) ***'
+    - 1: ''
+    - 2: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat >3 <1'' ***'
+    - 2: '*** USER_2 (#2) just piped ''cat >3 <1'' to USER_3 (#3) ***'
+    - 2: '% '
+    - 3: '*** USER_2 (#2) just received from USER_1 (#1) by ''cat >3 <1'' ***'
+    - 3: '*** USER_2 (#2) just piped ''cat >3 <1'' to USER_3 (#3) ***'
+    - 3: ''
+- COMMAND:
+    3: cat <2
+  RECV:
+    - 1: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 1: ''
+    - 2: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 2: ''
+    - 3: '*** USER_3 (#3) just received from USER_2 (#2) by ''cat <2'' ***'
+    - 3: str
+    - 3: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''USER_1'' left. ***'
+    - 1: ''
+    - 2: '*** User ''USER_1'' left. ***'
+    - 2: ''
+    - 3: '*** User ''USER_1'' left. ***'
+    - 3: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''USER_2'' left. ***'
+    - 2: ''
+    - 3: '*** User ''USER_2'' left. ***'
+    - 3: ''
+- COMMAND:
+    3: exit
+  RECV:
+    - 3: '*** User ''USER_3'' left. ***'
+    - 3: ''

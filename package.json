@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "NCTUCS Network Programming 2018 Fall Project 02 - RWGServer",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --reporter mochawesome",
     "format": "npm run format:js && npm run format:cpp",
-    "format:js": "npx prettier --loglevel warn --write \"*.{ts,js,json}\" \"test/*.js\"",
+    "format:js": "npx prettier --loglevel warn --write \"*.{ts,js,json}\" \"test/**/*.js\"",
     "format:cpp": "node node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
     "build": "make build",
     "start": "./build/npshell"
@@ -21,9 +21,13 @@
   "homepage": "https://github.com/jevancc/NP_Project01_Shell#readme",
   "devDependencies": {
     "clang-format": "^1.2.4",
+    "js-yaml": "^3.12.1",
+    "lodash": "^4.17.11",
     "mocha": "^5.2.0",
+    "mochawesome": "^3.1.1",
     "prettier": "^1.14.3",
     "shelljs": "^0.8.2",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "yargs": "^12.0.5"
   }
 }

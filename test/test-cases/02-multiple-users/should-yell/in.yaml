@@ -1,0 +1,10 @@
+- _CONNECT: 1
+- 1: yell hello, how are you? <>!@#$%^&*()_+/\|{}""''"'"';.~
+- _CONNECT: 2
+- _CONNECT: 3
+- 2: yell hello, how are you? <>!@#$%^&*()_+/\|{}""''"'"';.~
+- 1: name USER_1
+- 1: yell hello, how are you? <>!@#$%^&*()_+/\|{}""''"'"';.~
+- 1: exit
+- 2: exit
+- 3: exit

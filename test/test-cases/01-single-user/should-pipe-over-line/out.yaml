@@ -1,0 +1,127 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: echo line1 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: line1
+    - 1: '% '
+- COMMAND:
+    1: echo line3 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat
+  RECV:
+    - 1: line3
+    - 1: '% '
+- COMMAND:
+    1: echo line5 | cat |2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo line6 | cat |2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: line5
+    - 1: '% '
+- COMMAND:
+    1: cat | cat
+  RECV:
+    - 1: line6
+    - 1: '% '
+- COMMAND:
+    1: echo line9 | cat |3
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo line13 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat
+  RECV:
+    - 1: line13
+    - 1: '% '
+- COMMAND:
+    1: echo line15 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat | cat | cat |2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo line18
+  RECV:
+    - 1: line18
+    - 1: '% '
+- COMMAND:
+    1: cat | cat
+  RECV:
+    - 1: line15
+    - 1: '% '
+- COMMAND:
+    1: echo line20 |2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: echo line21 |2
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: line20
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: line21
+    - 1: '% '
+- COMMAND:
+    1: echo line24 | cat |1
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: ''
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat
+  RECV:
+    - 1: line24
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''

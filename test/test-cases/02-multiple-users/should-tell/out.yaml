@@ -1,0 +1,65 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: 'tell 2 hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** Error: user #2 does not exist yet. ***'
+    - 1: '% '
+- COMMAND:
+    1: 'tell 1 hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** (no name) told you ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: 'tell 2 hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '% '
+    - 2: '*** (no name) told you ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 2: ''
+- COMMAND:
+    2: 'tell 1 hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** (no name) told you ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 1: ''
+    - 2: '% '
+- COMMAND:
+    1: name USER_1
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 1: '% '
+    - 2: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 2: ''
+- COMMAND:
+    1: 'tell 2 hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '% '
+    - 2: '*** USER_1 told you ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 2: ''
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''USER_1'' left. ***'
+    - 1: ''
+    - 2: '*** User ''USER_1'' left. ***'
+    - 2: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''

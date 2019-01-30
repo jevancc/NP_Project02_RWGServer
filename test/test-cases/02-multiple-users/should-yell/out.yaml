@@ -1,0 +1,83 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    1: 'yell hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** (no name) yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    _CONNECT: 3
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '****************************************'
+    - 3: '** Welcome to the information server. **'
+    - 3: '****************************************'
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: '% '
+- COMMAND:
+    2: 'yell hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** (no name) yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 1: ''
+    - 2: '*** (no name) yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 2: '% '
+    - 3: '*** (no name) yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 3: ''
+- COMMAND:
+    1: name USER_1
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 1: '% '
+    - 2: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''USER_1''. ***'
+    - 3: ''
+- COMMAND:
+    1: 'yell hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+  RECV:
+    - 1: '*** USER_1 yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 1: '% '
+    - 2: '*** USER_1 yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 2: ''
+    - 3: '*** USER_1 yelled ***: hello, how are you? <>!@#$%^&*()_+/\|{}""''''"''"'';.~'
+    - 3: ''
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''USER_1'' left. ***'
+    - 1: ''
+    - 2: '*** User ''USER_1'' left. ***'
+    - 2: ''
+    - 3: '*** User ''USER_1'' left. ***'
+    - 3: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+- COMMAND:
+    3: exit
+  RECV:
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''

@@ -1,6 +1,0 @@
-echo line1 | cat
-echo line2 | cat | cat
-echo line2 | cat | cat | cat
-echo line2 | cat | cat | cat | cat
-echo line2 | cat | cat | ls  | cat
-exit
