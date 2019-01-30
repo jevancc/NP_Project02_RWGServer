@@ -1,0 +1,7 @@
+- _CONNECT: 1
+- 1: echo line1 | cat
+- 1: echo line2 | cat | cat
+- 1: echo line2 | cat | cat | cat
+- 1: echo line2 | cat | cat | cat | cat
+- 1: echo line2 | cat | cat | ls  | cat
+- 1: exit

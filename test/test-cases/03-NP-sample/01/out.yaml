@@ -1,0 +1,112 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: printenv PATH
+  RECV:
+    - 1: 'bin:.'
+    - 1: '% '
+- COMMAND:
+    1: setenv PATH .
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: printenv PATH
+  RECV:
+    - 1: .
+    - 1: '% '
+- COMMAND:
+    2: printenv PATH
+  RECV:
+    - 2: 'bin:.'
+    - 2: '% '
+- COMMAND:
+    2: ls | number |2
+  RECV:
+    - 2: '% '
+- COMMAND:
+    2: cat test.html |1
+  RECV:
+    - 2: '% '
+- COMMAND:
+    1: ls | number
+  RECV:
+    - 1: 'Unknown command: [ls].'
+    - 1: 'Unknown command: [number].'
+    - 1: '% '
+- COMMAND:
+    2: cat
+  RECV:
+    - 2: '   1 bin'
+    - 2: '   2 test.html'
+    - 2: <!test.html>
+    - 2: <TITLE>Test</TITLE>
+    - 2: <BODY>This is a <b>test</b> program
+    - 2: for ras.
+    - 2: </BODY>
+    - 2: '% '
+- COMMAND:
+    1: setenv PATH bin
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: printenv PATH
+  RECV:
+    - 1: bin
+    - 1: '% '
+- COMMAND:
+    1: ls > ls.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    1: cat ls.txt
+  RECV:
+    - 1: bin
+    - 1: ls.txt
+    - 1: test.html
+    - 1: '% '
+- COMMAND:
+    2: removetag test.html | number
+  RECV:
+    - 2: '   1 '
+    - 2: '   2 Test'
+    - 2: '   3 This is a test program'
+    - 2: '   4 for ras.'
+    - 2: '   5 '
+    - 2: '% '
+- COMMAND:
+    1: number test.html | removetag
+  RECV:
+    - 1: '   1 '
+    - 1: '   2 Test'
+    - 1: '   3 This is a test program'
+    - 1: '   4 for ras.'
+    - 1: '   5 '
+    - 1: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''

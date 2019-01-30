@@ -1,0 +1,16 @@
+- _CONNECT: 1
+- 1: touch file1
+- 1: ls
+- 1: setenv PATH bin2
+- 1: touch file2
+- 1: ls
+- 1: setenv PATH bin
+- 1: touch file3
+- 1: ls
+- 1: setenv PATH .
+- 1: touch file4
+- 1: ls
+- 1: setenv PATH bin:bin2
+- 1: touch file5
+- 1: ls
+- 1: exit

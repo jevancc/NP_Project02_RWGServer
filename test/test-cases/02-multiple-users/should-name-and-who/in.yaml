@@ -1,0 +1,18 @@
+- _CONNECT: 1
+- 1: who
+- 1: name USER_1
+- 1: who
+- _CONNECT: 2
+- 1: who
+- 2: who
+- 2: name USER_2
+- 1: who
+- 2: who
+- 1: name USER_1_NEW
+- 1: who
+- 2: who
+- 2: name USER_1_NEW
+- 2: who
+- 1: exit
+- 2: who
+- 2: exit

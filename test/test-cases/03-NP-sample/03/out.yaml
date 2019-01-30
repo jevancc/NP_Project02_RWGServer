@@ -1,0 +1,191 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    _CONNECT: 3
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '****************************************'
+    - 3: '** Welcome to the information server. **'
+    - 3: '****************************************'
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: '% '
+- COMMAND:
+    1: name ApplePie
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''ApplePie''. ***'
+    - 1: '% '
+    - 2: '*** User from CGILAB/511 is named ''ApplePie''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''ApplePie''. ***'
+    - 3: ''
+- COMMAND:
+    2: name BakedCake
+  RECV:
+    - 1: '*** User from CGILAB/511 is named ''BakedCake''. ***'
+    - 1: ''
+    - 2: '*** User from CGILAB/511 is named ''BakedCake''. ***'
+    - 2: '% '
+    - 3: '*** User from CGILAB/511 is named ''BakedCake''. ***'
+    - 3: ''
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tApplePie\tCGILAB/511"
+    - 2: "2\tBakedCake\tCGILAB/511\t<-me"
+    - 2: "3\t(no name)\tCGILAB/511"
+    - 2: '% '
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''ApplePie'' left. ***'
+    - 1: ''
+    - 2: '*** User ''ApplePie'' left. ***'
+    - 2: ''
+    - 3: '*** User ''ApplePie'' left. ***'
+    - 3: ''
+- COMMAND:
+    3: name Cream
+  RECV:
+    - 2: '*** User from CGILAB/511 is named ''Cream''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''Cream''. ***'
+    - 3: '% '
+- COMMAND:
+    _CONNECT: 4
+  RECV:
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: ''
+    - 4: '****************************************'
+    - 4: '** Welcome to the information server. **'
+    - 4: '****************************************'
+    - 4: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 4: '% '
+- COMMAND:
+    3: who
+  RECV:
+    - 3: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 3: "1\t(no name)\tCGILAB/511"
+    - 3: "2\tBakedCake\tCGILAB/511"
+    - 3: "3\tCream\tCGILAB/511\t<-me"
+    - 3: '% '
+- COMMAND:
+    4: name Donut
+  RECV:
+    - 2: '*** User from CGILAB/511 is named ''Donut''. ***'
+    - 2: ''
+    - 3: '*** User from CGILAB/511 is named ''Donut''. ***'
+    - 3: ''
+    - 4: '*** User from CGILAB/511 is named ''Donut''. ***'
+    - 4: '% '
+- COMMAND:
+    2: who
+  RECV:
+    - 2: "<ID>\t<nickname>\t<IP/port>\t<indicate me>"
+    - 2: "1\tDonut\tCGILAB/511"
+    - 2: "2\tBakedCake\tCGILAB/511\t<-me"
+    - 2: "3\tCream\tCGILAB/511"
+    - 2: '% '
+- COMMAND:
+    2: yell I am hungry.
+  RECV:
+    - 2: '*** BakedCake yelled ***: I am hungry.'
+    - 2: '% '
+    - 3: '*** BakedCake yelled ***: I am hungry.'
+    - 3: ''
+    - 4: '*** BakedCake yelled ***: I am hungry.'
+    - 4: ''
+- COMMAND:
+    3: yell Me too.
+  RECV:
+    - 2: '*** Cream yelled ***: Me too.'
+    - 2: ''
+    - 3: '*** Cream yelled ***: Me too.'
+    - 3: '% '
+    - 4: '*** Cream yelled ***: Me too.'
+    - 4: ''
+- COMMAND:
+    2: tell 3 What do you want to eat?
+  RECV:
+    - 2: '% '
+    - 3: '*** BakedCake told you ***: What do you want to eat?'
+    - 3: ''
+- COMMAND:
+    2: tell 5 Donut?
+  RECV:
+    - 2: '*** Error: user #5 does not exist yet. ***'
+    - 2: '% '
+- COMMAND:
+    2: tell 3 Donut?
+  RECV:
+    - 2: '% '
+    - 3: '*** BakedCake told you ***: Donut?'
+    - 3: ''
+- COMMAND:
+    3: tell 2 Sound good.
+  RECV:
+    - 2: '*** Cream told you ***: Sound good.'
+    - 2: ''
+    - 3: '% '
+- COMMAND:
+    4: tell 2 Don't eat me.
+  RECV:
+    - 2: '*** Donut told you ***: Don''t eat me.'
+    - 2: ''
+    - 4: '% '
+- COMMAND:
+    4: yell ls > test1.html
+  RECV:
+    - 2: '*** Donut yelled ***: ls > test1.html'
+    - 2: ''
+    - 3: '*** Donut yelled ***: ls > test1.html'
+    - 3: ''
+    - 4: '*** Donut yelled ***: ls > test1.html'
+    - 4: '% '
+- COMMAND:
+    4: tell 6 ls > test1.html
+  RECV:
+    - 4: '*** Error: user #6 does not exist yet. ***'
+    - 4: '% '
+- COMMAND:
+    2: exit
+  RECV:
+    - 2: '*** User ''BakedCake'' left. ***'
+    - 2: ''
+    - 3: '*** User ''BakedCake'' left. ***'
+    - 3: ''
+    - 4: '*** User ''BakedCake'' left. ***'
+    - 4: ''
+- COMMAND:
+    3: exit
+  RECV:
+    - 3: '*** User ''Cream'' left. ***'
+    - 3: ''
+    - 4: '*** User ''Cream'' left. ***'
+    - 4: ''
+- COMMAND:
+    4: exit
+  RECV:
+    - 4: '*** User ''Donut'' left. ***'
+    - 4: ''

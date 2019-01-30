@@ -1,0 +1,15 @@
+- _CONNECT: 1
+- 1: echo helloworld > file1.txt
+- 1: ls
+- 1: cat file1.txt
+- 1: echo helloworld | cat | cat > file2.txt
+- 1: ls
+- 1: cat file2.txt
+- 1: echo goodbyeworld > file1.txt
+- 1: ls
+- 1: cat file1.txt
+- 1: echo helloworld | cat | cat |1
+- 1: cat | cat > file1.txt
+- 1: ls
+- 1: cat file1.txt
+- 1: exit
