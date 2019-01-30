@@ -2,6 +2,7 @@ const _ = require("lodash");
 const fs = require("fs");
 const net = require("net");
 const util = require("util");
+const yaml = require("js-yaml");
 
 const sleep = t => new Promise(r => setTimeout(() => r(), t || 100));
 
@@ -94,4 +95,12 @@ async function delayClient(ip, port, commands, delay) {
     )
   }));
 }
+delayClient.yaml = async (ip, port, commands, delay) => {
+  return yaml.safeDump(await delayClient(ip, port, commands, delay), {
+    indent: 2,
+    lineWidth: 240,
+    noRefs: true,
+    schema: yaml.FAILSAFE_SCHEMA
+  });
+};
 module.exports = delayClient;

@@ -25,12 +25,7 @@ const argv = require("yargs")
   let input = yaml.safeLoad(await util.promisify(fs.readFile)(file, "utf8"), {
     schema: yaml.FAILSAFE_SCHEMA
   });
-  let output = yaml.safeDump(await delayClient(ip, port, input, argv.delay), {
-    indent: 2,
-    lineWidth: 240,
-    noRefs: true,
-    schema: yaml.FAILSAFE_SCHEMA
-  });
+  let output = await delayClient.yaml(ip, port, input, argv.delay);
   if (argv.output) {
     await util.promisify(fs.writeFile)(argv.output, output);
   } else {

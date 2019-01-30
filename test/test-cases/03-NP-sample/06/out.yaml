@@ -1,0 +1,193 @@
+- COMMAND:
+    _CONNECT: 1
+  RECV:
+    - 1: '****************************************'
+    - 1: '** Welcome to the information server. **'
+    - 1: '****************************************'
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: '% '
+- COMMAND:
+    _CONNECT: 2
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '****************************************'
+    - 2: '** Welcome to the information server. **'
+    - 2: '****************************************'
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: '% '
+- COMMAND:
+    1: removetag test.html | number | cat >2
+  RECV:
+    - 1: '*** (no name) (#1) just piped ''removetag test.html | number | cat >2'' to (no name) (#2) ***'
+    - 1: '% '
+    - 2: '*** (no name) (#1) just piped ''removetag test.html | number | cat >2'' to (no name) (#2) ***'
+    - 2: ''
+- COMMAND:
+    1: ls | number > ls.txt
+  RECV:
+    - 1: '% '
+- COMMAND:
+    2: ls >3
+  RECV:
+    - 2: '*** Error: user #3 does not exist yet. ***'
+    - 2: '% '
+- COMMAND:
+    _CONNECT: 3
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '****************************************'
+    - 3: '** Welcome to the information server. **'
+    - 3: '****************************************'
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: '% '
+- COMMAND:
+    3: cat <2
+  RECV:
+    - 3: '*** Error: the pipe #2->#3 does not exist yet. ***'
+    - 3: '% '
+- COMMAND:
+    2: cat <1 >3
+  RECV:
+    - 1: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1 >3'' ***'
+    - 1: '*** (no name) (#2) just piped ''cat <1 >3'' to (no name) (#3) ***'
+    - 1: ''
+    - 2: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1 >3'' ***'
+    - 2: '*** (no name) (#2) just piped ''cat <1 >3'' to (no name) (#3) ***'
+    - 2: '% '
+    - 3: '*** (no name) (#2) just received from (no name) (#1) by ''cat <1 >3'' ***'
+    - 3: '*** (no name) (#2) just piped ''cat <1 >3'' to (no name) (#3) ***'
+    - 3: ''
+- COMMAND:
+    _CONNECT: 4
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: ''
+    - 4: '****************************************'
+    - 4: '** Welcome to the information server. **'
+    - 4: '****************************************'
+    - 4: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 4: '% '
+- COMMAND:
+    3: cat <2 >4
+  RECV:
+    - 1: '*** (no name) (#3) just received from (no name) (#2) by ''cat <2 >4'' ***'
+    - 1: '*** (no name) (#3) just piped ''cat <2 >4'' to (no name) (#4) ***'
+    - 1: ''
+    - 2: '*** (no name) (#3) just received from (no name) (#2) by ''cat <2 >4'' ***'
+    - 2: '*** (no name) (#3) just piped ''cat <2 >4'' to (no name) (#4) ***'
+    - 2: ''
+    - 3: '*** (no name) (#3) just received from (no name) (#2) by ''cat <2 >4'' ***'
+    - 3: '*** (no name) (#3) just piped ''cat <2 >4'' to (no name) (#4) ***'
+    - 3: '% '
+    - 4: '*** (no name) (#3) just received from (no name) (#2) by ''cat <2 >4'' ***'
+    - 4: '*** (no name) (#3) just piped ''cat <2 >4'' to (no name) (#4) ***'
+    - 4: ''
+- COMMAND:
+    _CONNECT: 5
+  RECV:
+    - 1: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 4: ''
+    - 5: '****************************************'
+    - 5: '** Welcome to the information server. **'
+    - 5: '****************************************'
+    - 5: '*** User ''(no name)'' entered from CGILAB/511. ***'
+    - 5: '% '
+- COMMAND:
+    4: cat >5 <3
+  RECV:
+    - 1: '*** (no name) (#4) just received from (no name) (#3) by ''cat >5 <3'' ***'
+    - 1: '*** (no name) (#4) just piped ''cat >5 <3'' to (no name) (#5) ***'
+    - 1: ''
+    - 2: '*** (no name) (#4) just received from (no name) (#3) by ''cat >5 <3'' ***'
+    - 2: '*** (no name) (#4) just piped ''cat >5 <3'' to (no name) (#5) ***'
+    - 2: ''
+    - 3: '*** (no name) (#4) just received from (no name) (#3) by ''cat >5 <3'' ***'
+    - 3: '*** (no name) (#4) just piped ''cat >5 <3'' to (no name) (#5) ***'
+    - 3: ''
+    - 4: '*** (no name) (#4) just received from (no name) (#3) by ''cat >5 <3'' ***'
+    - 4: '*** (no name) (#4) just piped ''cat >5 <3'' to (no name) (#5) ***'
+    - 4: '% '
+    - 5: '*** (no name) (#4) just received from (no name) (#3) by ''cat >5 <3'' ***'
+    - 5: '*** (no name) (#4) just piped ''cat >5 <3'' to (no name) (#5) ***'
+    - 5: ''
+- COMMAND:
+    5: cat <4 |1
+  RECV:
+    - 1: '*** (no name) (#5) just received from (no name) (#4) by ''cat <4 |1'' ***'
+    - 1: ''
+    - 2: '*** (no name) (#5) just received from (no name) (#4) by ''cat <4 |1'' ***'
+    - 2: ''
+    - 3: '*** (no name) (#5) just received from (no name) (#4) by ''cat <4 |1'' ***'
+    - 3: ''
+    - 4: '*** (no name) (#5) just received from (no name) (#4) by ''cat <4 |1'' ***'
+    - 4: ''
+    - 5: '*** (no name) (#5) just received from (no name) (#4) by ''cat <4 |1'' ***'
+    - 5: '% '
+- COMMAND:
+    5: cat
+  RECV:
+    - 5: '   1 '
+    - 5: '   2 Test'
+    - 5: '   3 This is a test program'
+    - 5: '   4 for ras.'
+    - 5: '   5 '
+    - 5: '% '
+- COMMAND:
+    5: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' left. ***'
+    - 4: ''
+    - 5: '*** User ''(no name)'' left. ***'
+    - 5: ''
+- COMMAND:
+    4: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+    - 4: '*** User ''(no name)'' left. ***'
+    - 4: ''
+- COMMAND:
+    3: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+    - 3: '*** User ''(no name)'' left. ***'
+    - 3: ''
+- COMMAND:
+    2: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
+    - 2: '*** User ''(no name)'' left. ***'
+    - 2: ''
+- COMMAND:
+    1: exit
+  RECV:
+    - 1: '*** User ''(no name)'' left. ***'
+    - 1: ''
