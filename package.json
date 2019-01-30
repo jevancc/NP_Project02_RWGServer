@@ -1,7 +1,7 @@
 {
-  "name": "np_project01_npshell",
+  "name": "np_project02_rwgserver",
   "version": "1.0.0",
-  "description": "NCTUCS Network Programming 2018 Fall Project 02 - RWGServer",
+  "description": "NCTUCS Network Programming 2018 Fall Project 02 - RWGServer:Simple",
   "scripts": {
     "test": "cross-env PORT=12300 DELAY=200 mocha --reporter mochawesome",
     "test:pretty": "cross-env PORT=12300 DELAY=200 TEST_MODE=yaml mocha --reporter mochawesome",
@@ -9,17 +9,17 @@
     "format:js": "npx prettier --loglevel warn --write \"*.{ts,js,json}\" \"test/*.js\" \"test/{lib}/*.js\"",
     "format:cpp": "node node_modules/clang-format/index.js -i --glob=\"src/**/*.@(c|cpp|cc|h|hpp|hh)\"",
     "build": "make build",
-    "start": "./build/npshell"
+    "start": "./np_simple"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jevancc/NP_Project01_Shell.git"
+    "url": "git+https://github.com/jevancc/NP_Project02_RWGServer/tree/simple-server"
   },
   "author": "Jevan Chan <jevan.cnchan@gmail.com>",
-  "homepage": "https://github.com/jevancc/NP_Project01_Shell#readme",
+  "homepage": "https://github.com/jevancc/NP_Project02_RWGServer/tree/simple-server#readme",
   "devDependencies": {
     "clang-format": "^1.2.4",
     "cross-env": "^5.2.0",
