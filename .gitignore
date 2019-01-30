@@ -30,8 +30,7 @@
 *.exe
 *.out
 *.app
-npshell
-npserver_single_proc
+np_single_proc
 
 # Logs and Reports
 *.log

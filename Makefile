@@ -7,7 +7,7 @@ INCLUDES = \
 	-Ilib/optional-lite/include
 
 OUT = ./build
-EXE = $(OUT)/npserver_single_proc
+EXE = $(OUT)/np_single_proc
 SRC = ./src
 LIB = ./lib
 OBJ = $(OUT)/objs
@@ -18,8 +18,8 @@ ALL := \
 .PHONY: build
 
 all: build
-	@cp $(EXE) ./npserver_single_proc
-	@chmod 775 ./npserver_single_proc
+	@cp $(EXE) ./np_single_proc
+	@chmod 775 ./np_single_proc
 
 $(OBJ)/%.o: $(SRC)/%.cc  $(shell find $(SRC)/include -name "*.h")
 	@mkdir -p $(OBJ)

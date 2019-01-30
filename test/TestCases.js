@@ -10,7 +10,7 @@ const psTree = require("ps-tree");
 const tcpPortUsed = require("tcp-port-used");
 const delayClient = require("./lib/DelayClient");
 
-const ExecPath = path.resolve("npserver_single_proc");
+const ExecPath = path.resolve("np_single_proc");
 const ExecCheckShm = path.resolve("test/bin/shm.sh");
 const ExecCheckZombie = path.resolve("test/bin/zombie.sh");
 
