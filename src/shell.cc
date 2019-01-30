@@ -137,6 +137,8 @@ void Shell::Execute(string input) {
     while ((status = task.Execute(*this)) == ExecError::kForkFailed) {
       usleep(1000);
     }
+
+    usleep(500);
     switch (status) {
       case ExecError::kFileNotFound:
         fmt::print("Unknown command: [{}].\n", task.GetFile());
