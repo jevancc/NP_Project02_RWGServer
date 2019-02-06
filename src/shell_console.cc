@@ -16,6 +16,7 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <np/utils.h>
 using namespace std;
 using nonstd::nullopt;
 using nonstd::optional;
@@ -97,18 +98,19 @@ ssize_t ShellConsole::Send2Uid(int uid, const string& msg) const {
     spdlog::error(msg);
     throw runtime_error(msg);
   }
-  return send(shell->sockfd_, msg.c_str(), msg.size(), 0);
+
+  return np::utils::SafeSend(shell->sockfd_, msg);
 }
 
 ssize_t ShellConsole::Send2Fd(int fd, const string& msg) const {
-  return send(fd, msg.c_str(), msg.size(), 0);
+  return np::utils::SafeSend(fd, msg);
 }
 
 ssize_t ShellConsole::Broadcast(const string& msg) const {
   ssize_t ret = 0;
   for (auto& fd_user : this->fd2user_map_) {
     int ufd = fd_user.first;
-    ret |= send(ufd, msg.c_str(), msg.size(), 0);
+    ret |= np::utils::SafeSend(ufd, msg);
   }
   return ret;
 }
